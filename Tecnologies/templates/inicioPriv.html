@@ -3,13 +3,12 @@
 <html lang="es"><head>
     <meta charset="UTF-8">
 
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   html {
     scroll-behavior: smooth;
   }
 </style>
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Empire Tecnologies Inc | Inicio</title>
@@ -26,6 +25,7 @@
         <nav>
             <a href="#">Inicio</a>
             <a href="#contact">Contacto</a>
+            <a href="#port">Portafolio</a>
             <a href="#servic">Servicios</a>
 
             {% if request.user.is_authenticated %}
@@ -45,7 +45,7 @@
             </svg></div>
     </header>
     <main>
-        <section class="contenedor sobre-nosotros" id="servic">
+        <section class="contenedor sobre-nosotros">
             <h2 class="titulo">Nuestro Servicio</h2>
             <div class="contenedor-sobre-nosotros">
                 <img src= "{% static 'img/IA.jpg' %}" alt="" class="imagen-about-us">
@@ -54,13 +54,39 @@
                     <p>Somos una empresa que fomenta tu creatividad, realizamos los mejores sistemas para
                         tu negocio.</p>
                     <h3><span>2</span>Los mejores servicios</h3>
-                    <p>Fomentamos tu creatividad, donde quiera a la hora que quieras realizaremos el sistema
-                        que mejor te parezca.</p>
+                    <p>Potenciamos tu negocio con los mejores sistemas</p>
                 </div>
             </div>
         </section>
-
-       
+        <section class="portafolio" id="port">
+            <div class="contenedor">
+                <h2 class="titulo">Portafolio</h2>
+                <div class="galeria-port">
+                    <div class="imagen-port">
+                        <img src= "{% static 'img/img7.jpg' %}">
+                        <div class="hover-galeria">
+                            
+                            <p>Sistema web</p>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static 'img/img3.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                           
+                            <p>Aplicativo</p>
+                        </div>
+                    </div>
+                    <div class="imagen-port">
+                        <img src="{% static 'img/img6.jpg' %}" alt="">
+                        <div class="hover-galeria">
+                           
+                            <p>Asesoria</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
         <section class="clientes contenedor">
             <h2 class="titulo">Clientes</h2>
             <div class="cards">
@@ -80,7 +106,7 @@
                 </div>
             </div>
         </section>
-        <section class="about-services">
+        <section class="about-services" id="servic">
             <div class="contenedor">
                 <h2 class="titulo">Nuestros servicios</h2>
                 <div class="servicio-cont">
@@ -104,7 +130,9 @@
         </section>
     </main>
     <footer>
-        <section id="contact"></section>
+
+        <section id="contact">
+
         <div class="contenedor-footer">
             <div class="content-foo">
                 <h4>Phone</h4>
@@ -122,7 +150,7 @@
         <h2 class="titulo-final">© Empire Tecnologies | valenciaaa</h2>
     </footer>
 
-    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
+<a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
   <i class="fab fa-whatsapp"></i>
 </a>
 

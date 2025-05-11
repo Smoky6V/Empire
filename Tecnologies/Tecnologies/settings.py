@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Empire',  
         'USER': 'root',                  
-        'PASSWORD': '',           
+        'PASSWORD': 'admin',           
         'HOST': 'localhost',                   
         'PORT': '3306',                        
     }
@@ -126,10 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
 #
 #  Default primary key field type

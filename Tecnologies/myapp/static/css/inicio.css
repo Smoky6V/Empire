@@ -431,3 +431,39 @@ footer{
     }
 }
 
+
+/*icono de ws */
+
+.whatsapp-float, .scroll-top {
+  position: fixed;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 50%;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.whatsapp-float {
+  background-color: #25d366;
+  right: 20px;
+}
+
+.scroll-top {
+  background-color: #6d1826;
+  right: 80px;
+}
+
+.fab.fa-whatsapp{
+
+line-height: 2;
+}
+
+.fas.fa-arrow-up{
+line-height: 2;
+
+}

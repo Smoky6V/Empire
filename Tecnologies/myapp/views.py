@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 
@@ -27,13 +27,27 @@ def login_view(request):
 
 
 def index(request):
-    
-    
-    if request.user.is_authenticated:
+          
+     if request.user.groups.filter(name='Administradores').exists():
+        return render(request, 'admindash.html')
+     elif request.user.groups.filter(name='Clientes').exists():
+        return render(request, 'cliente_dashboard.html')
+     elif request.user.groups.filter(name='Vendedores').exists():
+        return render(request, 'vendedor_dashboard.html')
+     elif request.user.groups.filter(name='Usuarios').exists():
+        return render(request, 'inicioPriv.html')
+     else:
         return render(request, 'inicio.html')
-    
-    else:
-         return redirect('login')
+        
+
+
+
+
+          #else:
+           #    return render(request, 'inicio.html')
+          
+          
+   
 
 
 def logout_view(request):
@@ -43,34 +57,39 @@ def logout_view(request):
 
 def register(request):
     if request.method == 'POST':
-         
-         username = request.POST.get('username')
-         email = request.POST.get('email')
-         password = request.POST.get('password')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-         if not username or not email or not password:
-              messages.error(request, "Todos los campos son obligatorios")
-              return redirect('register')
+        if not username or not email or not password:
+            messages.error(request, "Todos los campos son obligatorios")
+            return redirect('register')
 
-         if User.objects.filter(username=username).exists():
-              messages.error(request, "Nombre en uso")
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Nombre en uso")
+            return redirect('register')
 
-              return redirect('register')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Correo en uso")
+            return redirect('register')
 
-         if User.objects.filter(email=email).exists():
-              messages.error(request, "Correo en uso")
+       
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
 
-              return redirect('register')
-         
+     #Agrega al usuario registrado automaticamente al grupo usuarios
+        try:
+            group = Group.objects.get(name='Usuarios')  
+        except Group.DoesNotExist:
+            group = Group.objects.create(name='Usuarios')  
+        user.groups.add(group)
 
-         user= User.objects.create_user(
-              username=username,
-              email=email,
-              password=password
-         )
-
-         login(request, user)
-         return redirect('index')
+       
+        login(request, user)
+        return redirect('index')
 
     return render(request, 'register.html')
            
