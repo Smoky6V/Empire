@@ -1,11 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/dashadmin.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  
 </head>
 <body>
-    
+
+  <div class="sidebar">
+    <h2>Admin</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Usuarios</a>
+    <a href="#">Estadísticas</a>
+    <a href="#">Configuración</a>
+
+     {% if request.user.is_authenticated %}
+     <a class="sesion" href="{% url 'logout' %}">Cerrar sesion</a>
+            {% else %}
+        <a class="sesion" href="{% url 'login' %}">Iniciar Sesión</a>
+    {% endif %}
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Bienvenido! {{request.user.username}}</h1>
+    </div>
+
+    <div class="stats">
+      <div class="card">
+        <h3>Usuarios Activos</h3>
+        <p id="usuarios">350</p>
+      </div>
+      <div class="card">
+        <h3>Ventas Hoy</h3>
+        <p id="ventas">$2,450</p>
+      </div>
+      <div class="card">
+        <h3>Soporte</h3>
+        <p id="soporte">23 tickets</p>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

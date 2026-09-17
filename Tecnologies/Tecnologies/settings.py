@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'Tecnologies.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'Empire',  
         'USER': 'root',                  
         'PASSWORD': 'admin',           
