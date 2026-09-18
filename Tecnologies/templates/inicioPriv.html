@@ -7,6 +7,8 @@
     <meta name="author" content="Juan Valencia">
     <meta name="description" content="Área privada de clientes de Empire Tecnologies Inc - accede a tus servicios, proyectos y soporte.">
     <meta name="keywords" content="área privada, clientes, Empire Tecnologies, servicios, soporte">
+    <!-- Área privada: no debe aparecer en buscadores ni seguirse desde enlaces externos -->
+    <meta name="robots" content="noindex, nofollow">
 
     <title>Mi Cuenta | Empire Tecnologies Inc</title>
 
@@ -33,6 +35,9 @@
     <link rel="stylesheet" href="{% static 'css/inicioPriv.css' %}">
 </head>
 <body>
+
+   
+    {% with empPhone="8296312" empPhoneTel="+578296312" empEmail="contacto@empiretec.com" empWhatsapp="https://wa.me/578296312" empGithub="https://github.com/Smoky6V/Empire" %}
 
     <!-- ================= NAVBAR ================= -->
     <nav class="navbar navbar-expand-lg emp-navbar fixed-top" id="mainNav">
@@ -105,8 +110,8 @@
                     <p class="emp-stat__label">Cliente desde</p>
                 </div>
                 <div class="emp-stat">
-                    <p class="emp-stat__number">{{ request.user.last_login|date:"d M"|default:"Hoy" }}</p>
-                    <p class="emp-stat__label">Última conexión</p>
+                    <p class="emp-stat__number">{{ request.user.last_login|date:"H:i"|default:"--:--" }}</p>
+                    <p class="emp-stat__label">Sesión iniciada hoy</p>
                 </div>
                 <div class="emp-stat">
                     <p class="emp-stat__number">24/7</p>
@@ -267,7 +272,7 @@
                             </p>
                         </article>
                     </div>
-<div class="col-md-6 col-lg-4 emp-reveal">
+                    <div class="col-md-6 col-lg-4 emp-reveal">
                         <article class="emp-card">
                             <span class="emp-card__icon"><i class="fas fa-robot"></i></span>
                             <h3 class="emp-card__title">Automatización e IA</h3>
@@ -353,7 +358,7 @@
                             </figcaption>
                         </figure>
                     </div>
-<div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="ia">
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="ia">
                         <figure class="emp-project">
                             <img src="{% static 'img/img4.jpg' %}" alt="Panel de analítica con inteligencia artificial de Empire Tecnologies">
                             <figcaption class="emp-project__overlay">
@@ -433,7 +438,7 @@
                             </li>
                         </ul>
 
-                        <a class="btn emp-btn emp-btn--whatsapp" href="https://wa.me/1234567890"
+                        <a class="btn emp-btn emp-btn--whatsapp" href="{{ empWhatsapp }}"
                            target="_blank" rel="noopener">
                             <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
                         </a>
@@ -462,7 +467,7 @@
                                         <option value="Otro">Otro</option>
                                     </select>
                                 </div>
-<div class="col-12">
+                                <div class="col-12">
                                     <label class="emp-form__label" for="cMensaje">Mensaje</label>
                                     <textarea class="form-control emp-form__input" id="cMensaje" name="mensaje"
                                               rows="4" placeholder="Describe tu solicitud con el mayor detalle posible"
@@ -488,16 +493,15 @@
                         <span class="emp-eyebrow emp-eyebrow--light">Contacto</span>
                         <h2 class="emp-title emp-title--light emp-title--left">¿Listo para tu próximo proyecto?</h2>
                         <p class="emp-subtitle emp-subtitle--light emp-subtitle--left">
-                            <!-- Reemplaza estos datos por los de contacto reales de la empresa -->
-                            Escríbenos al <strong>8296312</strong> o a
-                            <strong>contacto@empiretec.com</strong> y coordinamos una reunión.
+                            Escríbenos al <strong>{{ empPhone }}</strong> o a
+                            <strong>{{ empEmail }}</strong> y coordinamos una reunión.
                         </p>
                     </div>
                     <div class="emp-cta__actions">
-                        <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="mailto:contacto@empiretec.com">
+                        <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="mailto:{{ empEmail }}">
                             <i class="fas fa-envelope"></i> Escribir un correo
                         </a>
-                        <a class="btn emp-btn emp-btn--light emp-btn--lg" href="https://wa.me/1234567890"
+                        <a class="btn emp-btn emp-btn--light emp-btn--lg" href="{{ empWhatsapp }}"
                            target="_blank" rel="noopener">
                             <i class="fab fa-whatsapp"></i> WhatsApp
                         </a>
@@ -520,10 +524,10 @@
                         automatización para que tu operación nunca se detenga.
                     </p>
                     <div class="emp-social">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="{{ empWhatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:{{ empEmail }}" aria-label="Correo electrónico"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:{{ empPhoneTel }}" aria-label="Teléfono"><i class="fas fa-phone-alt"></i></a>
+                        <a href="{{ empGithub }}" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
 
@@ -550,15 +554,13 @@
                 <div class="col-lg-3">
                     <h4 class="emp-footer__title">Contacto</h4>
                     <ul class="emp-footer__links emp-footer__links--contact">
-                        <li><i class="fas fa-phone-alt"></i> <a href="tel:8296312">8296312</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:contacto@empiretec.com">contacto@empiretec.com</a></li>
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:{{ empPhoneTel }}">{{ empPhone }}</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:{{ empEmail }}">{{ empEmail }}</a></li>
                         <li><i class="fas fa-map-marker-alt"></i> Colombia</li>
                     </ul>
-                    {% if request.user.is_authenticated %}
+                    {# Esta plantilla solo se renderiza con sesión iniciada (accounts/authz.py),
+                       así que aquí no existe el caso anónimo. #}
                     <a class="btn emp-btn emp-btn--ghost btn-sm w-100" href="{% url 'logout' %}">Cerrar sesión</a>
-                    {% else %}
-                    <a class="btn emp-btn emp-btn--accent btn-sm w-100" href="{% url 'login' %}">Iniciar sesión</a>
-                    {% endif %}
                 </div>
             </div>
 
@@ -570,7 +572,7 @@
     </footer>
 
     <!-- Botones flotantes -->
-    <a class="emp-float emp-float--whatsapp" href="https://wa.me/1234567890" target="_blank" rel="noopener"
+    <a class="emp-float emp-float--whatsapp" href="{{ empWhatsapp }}" target="_blank" rel="noopener"
        aria-label="Escribir por WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
@@ -622,7 +624,7 @@
                 }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
                 sections.forEach(function (section) { spyObserver.observe(section); });
             }
-// Animación de aparición al hacer scroll
+            // Animación de aparición al hacer scroll
             var revealEls = Array.prototype.slice.call(document.querySelectorAll('.emp-reveal'));
             if ('IntersectionObserver' in window && revealEls.length) {
                 var revealObserver = new IntersectionObserver(function (entries, observer) {
@@ -663,7 +665,8 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             }
-// Formulario de soporte: envío por WhatsApp con los datos de la cuenta
+            // Formulario de soporte: envío por WhatsApp con los datos de la cuenta
+            var whatsappUrl = '{{ empWhatsapp|escapejs }}';
             var form = document.getElementById('contactForm');
             var note = document.getElementById('formNote');
             if (form) {
@@ -703,7 +706,7 @@
                         + 'Tipo: ' + servicio + '\n'
                         + 'Detalle: ' + mensaje;
 
-                    window.open('https://wa.me/1234567890?text=' + encodeURIComponent(texto),
+                    window.open(whatsappUrl + '?text=' + encodeURIComponent(texto),
                         '_blank', 'noopener');
 
                     if (note) {
@@ -715,5 +718,8 @@
             }
         })();
     </script>
+
+    {# Cierre del bloque "with" con los datos de contacto definidos arriba. #}
+    {% endwith %}
 </body>
 </html>

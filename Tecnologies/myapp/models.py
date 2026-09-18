@@ -1,10 +1,8 @@
 from django.db import models
 
-
-class Usuario(models.Model):
-    nombre = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    edad = models.IntegerField()
-
-    def __str__(self):
-        return self.nombre
+# El antiguo modelo `Usuario` (nombre/email/edad) definido aqui no se
+# utilizaba en ninguna vista ni formulario del proyecto (verificado por
+# busqueda en todo el codigo) y entraba en conflicto de nombre con el nuevo
+# Custom User Model (accounts.Usuario). Se retira por ser codigo muerto.
+# No existian migraciones previas para este modelo, por lo que no se pierde
+# historial de migraciones al eliminarlo.
