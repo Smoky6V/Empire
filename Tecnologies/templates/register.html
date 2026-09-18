@@ -1,89 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Juan Valencia">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="">
+    <meta name="description" content="Registro de usuario - Empire Tecnologies Inc">
+    <meta name="keywords" content="registro de usuario, formulario de registro, crear cuenta, registro en línea, Empire Tecnologies">
 
-    <!--keywords-->
-    <meta name="keywords" content="registro de usuario, fomulario de registro, crear cuenta, registro en linea">
+    <title>Crear Cuenta | Empire Tecnologies Inc</title>
+    {% load static %}
 
-    <!--minium responsive viewport -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--title-->
-    <title>Empire Tecnologies Inc</title>
-
-    {%load static%}
     <!--favicon-->
-    <link rel="icon" type="image/x-icon" href="img/buildings-fill.svg">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/buildings-fill.svg' %}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
           crossorigin="anonymous">
 
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
-
-
-    <!-- custom css -->
-
-    <link rel="stylesheet" href="{% static 'css/register.css'%}">
+    <!-- custom css (mismo diseño base que el login) -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
 </head>
-<body class="text-center">
-<!-- login form -->
-<main class="form-signin w-100 m-auto">
-    <form method="POST">
+<body>
+    <div class="login-wrapper">
 
-        {% csrf_token%}
-    
-        <img class="mb-4" src="{% static 'img/buildings-fill.svg' %}" alt="REGISTER" width="100">
-        <h4 class="text-secondary">REGISTRO</h4>
-        
+        <!-- Panel lateral (branding) -->
+        <aside class="login-brand">
+            <div class="login-brand__overlay"></div>
+            <div class="login-brand__content">
+                <img class="login-brand__logo" src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="72">
+                <h1 class="login-brand__title">Empire Tecnologies</h1>
+                <p class="login-brand__subtitle">
+                    Únete y accede a soluciones tecnológicas que impulsan tu negocio hacia el futuro.
+                </p>
+                <ul class="login-brand__features">
+                    <li><span class="dot"></span> Registro rápido y seguro</li>
+                    <li><span class="dot"></span> Gestión centralizada</li>
+                    <li><span class="dot"></span> Soporte especializado</li>
+                </ul>
+            </div>
+        </aside>
 
-        <div class="form-floating">
-            <input type="text" class="form-control"
-                   placeholder="ingrese su nombre" name= "username" id="username" required autofocus>
-            <label for="floatingInput">Nombre</label>
-        </div>
+        <!-- Panel del formulario -->
+        <main class="login-panel">
+            <div class="login-card login-card--register">
+                <div class="login-card__header">
+                    <img class="login-card__logo d-md-none" src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="56">
+                    <h2 class="login-card__title">Crea tu cuenta</h2>
+                    <p class="login-card__text">Completa tus datos para registrarte.</p>
+                </div>
 
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger login-alert" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                         class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+                {% endif %}
 
-        <div class="form-floating">
-            <input type="email" class="form-control" 
-                   placeholder="ingrese su correo" name= "email" id="email" required>
-            <label for="floatingEmail">Correo</label>
-        </div>
+                <form method="POST" class="login-form">
+                    {% csrf_token %}
 
-        <div class="form-floating">
-            <input type="password" class="form-control" 
-                   placeholder="ingrese su contraseña" name= "password" id="password" required>
-        <label for="floatingPassword">Contraseña</label>
-        </div>
+                    <div class="login-field">
+                        <label for="id_username" class="login-label">Nombre</label>
+                        <div class="login-input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                 class="login-input-icon" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.831 1.418-.832 1.664h10z"/>
+                            </svg>
+                            <input type="text" id="id_username" class="form-control login-input"
+                                   name="username" placeholder="Ingrese su nombre de usuario"
+                                   autocomplete="username" required autofocus>
+                        </div>
+                    </div>
 
-        <button class="w-100 btn btn-lg btn-danger" type="submit">Registrarse</button>
-        <div id="register">
-            <a href="{% url 'login' %}">¿Ya tienes cuenta?</a>
-        </div>
-        <p class="mt-3 mb-3 text-muted">Todos los Derechos Reservados Empire Tecnologies Inc
-           <!-- <%=displayDate()%> -->
-        </p>
+                    <div class="login-field">
+                        <label for="id_email" class="login-label">Correo</label>
+                        <div class="login-input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                 class="login-input-icon" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                            </svg>
+                            <input type="email" id="id_email" class="form-control login-input"
+                                   name="email" placeholder="Ingrese su correo"
+                                   autocomplete="email" required>
+                        </div>
+                    </div>
 
-    </form>
-</main>
-</main>
+                    <div class="login-field">
+                        <label for="id_password" class="login-label">Contraseña</label>
+                        <div class="login-input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                 class="login-input-icon" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+                            </svg>
+                            <input type="password" id="id_password" class="form-control login-input"
+                                   name="password" placeholder="Ingrese su contraseña"
+                                   autocomplete="new-password" required>
+                            <button type="button" class="login-toggle-pass" id="togglePassword"
+                                    aria-label="Mostrar u ocultar contraseña">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                     viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="login-hint">Usa al menos 8 caracteres, combinando letras y números.</p>
+                    </div>
+                    <button class="btn login-submit w-100" type="submit">Registrarse</button>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+                    <p class="login-register">
+                        ¿Ya tienes cuenta?
+                        <a href="{% url 'login' %}">Inicia sesión aquí</a>
+                    </p>
+                </form>
 
-<!-- <%!
-    public String displayDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY");
-        Date date = Calendar.getInstance().getTime();
-        return dateFormat.format(date);
-    }
-%> -->
+                <p class="login-footer">Todos los Derechos Reservados &copy; Empire Tecnologies Inc</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+
+    <script>
+        // Mostrar / ocultar contraseña (no afecta al envío del formulario)
+        (function () {
+            var toggle = document.getElementById('togglePassword');
+            var pass = document.getElementById('id_password');
+            if (toggle && pass) {
+                toggle.addEventListener('click', function () {
+                    var isPassword = pass.getAttribute('type') === 'password';
+                    pass.setAttribute('type', isPassword ? 'text' : 'password');
+                    toggle.classList.toggle('is-visible', isPassword);
+                });
+            }
+        })();
+    </script>
 
 </body>
 </html>
