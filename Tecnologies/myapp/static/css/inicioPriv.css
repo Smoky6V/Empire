@@ -1,0 +1,322 @@
+/* =====================================================
+   Empire Tecnologies - Complementos del Área Privada
+   Requiere: css/inicio.css (mismo diseño base)
+   ===================================================== */
+
+/* ---------- Hero privado: más compacto, con datos de texto ---------- */
+.emp-hero--private {
+    padding: 8.5rem 0 8rem;
+}
+
+.emp-hero--private .emp-hero__title {
+    font-size: clamp(1.9rem, 4.4vw, 3.1rem);
+}
+
+.emp-hero--private .emp-stat__number {
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+}
+
+/* ---------- Fondos de las secciones privadas ---------- */
+.emp-panel {
+    background: #ffffff;
+}
+
+.emp-soporte {
+    background: var(--empire-bg);
+}
+
+.emp-cta {
+    color: #ffffff;
+    background: linear-gradient(150deg, var(--empire-primary) 0%, #060c1c 100%);
+}
+
+/* Separación de los accesos rápidos respecto a las tarjetas de datos */
+.emp-quicks {
+    margin-top: 2.5rem;
+}
+
+/* ---------- Tarjeta de perfil ---------- */
+.emp-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 100%;
+    padding: 2rem;
+    background: #ffffff;
+    border: 1px solid var(--empire-border);
+    border-radius: var(--empire-radius);
+    box-shadow: var(--empire-shadow);
+}
+
+.emp-profile__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 86px;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--empire-primary) 0%, var(--empire-primary-light) 100%);
+    box-shadow: 0 12px 26px rgba(15, 27, 61, 0.22);
+}
+
+.emp-profile__body {
+    min-width: 0;
+}
+
+.emp-profile__name {
+    margin: 0 0 0.25rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--empire-primary);
+    word-break: break-word;
+}
+
+.emp-profile__mail {
+    margin: 0 0 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--empire-muted);
+    word-break: break-word;
+}
+
+.emp-profile__mail i {
+    color: var(--empire-accent);
+}
+
+/* ---------- Etiquetas de estado y perfil ---------- */
+.emp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.15rem 0.2rem 0.15rem 0;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--empire-primary-light);
+    background: var(--empire-bg);
+    border: 1px solid var(--empire-border);
+}
+
+.emp-chip--ok {
+    color: #0b6b3a;
+    background: #e7f8ef;
+    border-color: rgba(11, 107, 58, 0.25);
+}
+/* ---------- Datos de la cuenta ---------- */
+.emp-data {
+    height: 100%;
+    padding: 2rem;
+    background: #ffffff;
+    border: 1px solid var(--empire-border);
+    border-radius: var(--empire-radius);
+    box-shadow: 0 12px 34px rgba(15, 27, 61, 0.05);
+}
+
+.emp-data__list {
+    margin: 0;
+}
+
+.emp-data__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed var(--empire-border);
+}
+
+.emp-data__row:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.emp-data__row dt {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--empire-muted);
+}
+
+.emp-data__row dd {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--empire-primary);
+    text-align: right;
+}
+
+/* ---------- Accesos rápidos ---------- */
+.emp-quick {
+    display: block;
+    height: 100%;
+    padding: 1.6rem;
+    text-decoration: none;
+    background: #ffffff;
+    border: 1px solid var(--empire-border);
+    border-radius: var(--empire-radius);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.emp-quick:hover,
+.emp-quick:focus {
+    transform: translateY(-5px);
+    border-color: rgba(230, 57, 70, 0.35);
+    box-shadow: var(--empire-shadow);
+}
+
+.emp-quick__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.95rem;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    color: var(--empire-accent);
+    background: var(--empire-bg);
+    transition: color 0.25s ease, background 0.25s ease;
+}
+
+.emp-quick:hover .emp-quick__icon {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--empire-accent) 0%, var(--empire-accent-dark) 100%);
+}
+
+.emp-quick__title {
+    margin: 0 0 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--empire-primary);
+}
+
+.emp-quick__text {
+    margin: 0 0 1rem;
+    font-size: 0.86rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--empire-muted);
+}
+
+.emp-quick__arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--empire-accent);
+}
+
+.emp-quick--danger .emp-quick__icon {
+    color: var(--empire-accent-dark);
+}
+
+.emp-quick--danger .emp-quick__arrow {
+    color: var(--empire-accent-dark);
+}
+/* ---------- Formulario con datos de la cuenta ---------- */
+.emp-form--private .emp-form__input[readonly] {
+    background-color: #eff2f7;
+    color: var(--empire-muted);
+    cursor: not-allowed;
+}
+
+.emp-form--private .emp-form__input[readonly]:focus {
+    border-color: var(--empire-border);
+    box-shadow: none;
+}
+
+/* ---------- Bloque de contacto (CTA) ---------- */
+.emp-cta__box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 3rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.emp-cta__text {
+    flex: 1 1 420px;
+}
+
+.emp-cta__text .emp-subtitle {
+    margin-bottom: 0;
+}
+
+.emp-cta__text strong {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.emp-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+    .emp-hero--private {
+        padding: 7rem 0 8rem;
+    }
+
+    .emp-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .emp-data__row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .emp-data__row dd {
+        text-align: left;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .emp-cta__box {
+        padding: 1.75rem;
+    }
+
+    .emp-cta__actions .emp-btn {
+        width: 100%;
+    }
+
+    .emp-profile,
+    .emp-data {
+        padding: 1.5rem;
+    }
+
+    .emp-profile__avatar {
+        flex: 0 0 70px;
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
+    }
+}
+
+/* ---------- Accesibilidad ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .emp-quick:hover,
+    .emp-quick:focus {
+        transform: none;
+    }
+}
