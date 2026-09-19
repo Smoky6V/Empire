@@ -722,7 +722,7 @@
                     </span>
                     {% if request.user.is_staff %}
                     <a class="btn emp-btn emp-btn--ghost" href="{% url 'admin:index' %}">
-                        <i class="fas fa-gauge-high"></i> Django admin
+                        <i class="fas fa-gauge-high"></i>Admin
                     </a>
                     {% endif %}
                     <a class="btn emp-btn emp-btn--accent" href="{% url 'logout' %}">Cerrar sesión</a>
@@ -779,7 +779,7 @@
 
             <div class="emp-adm-header__actions">
                 <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="{% url 'admin:index' %}">
-                    <i class="fas fa-gauge-high"></i> Abrir Django admin
+                    <i class="fas fa-gauge-high"></i> Abrir admin
                 </a>
                 <a class="btn emp-btn emp-btn--light emp-btn--lg" href="{% url 'admin:accounts_usuario_changelist' %}">
                     <i class="fas fa-user-gear"></i> Gestionar usuarios
@@ -1419,7 +1419,7 @@
 
                             <div class="emp-adm-actions mt-3">
                                 <a class="emp-adm-btn" href="{% url 'admin:index' %}">
-                                    <i class="fas fa-gauge-high"></i> Ir al panel de Django
+                                    <i class="fas fa-gauge-high"></i> Ir al panel de Admin
                                 </a>
                             </div>
                         </div>
@@ -1555,7 +1555,7 @@
 
                             <div class="emp-adm-actions">
                                 <a class="emp-adm-btn emp-adm-btn--accent" href="{% url 'admin:index' %}">
-                                    <i class="fas fa-gauge-high"></i> Django admin
+                                    <i class="fas fa-gauge-high"></i> Admin
                                 </a>
                                 <a class="emp-adm-btn" href="{% url 'admin:accounts_usuario_changelist' %}">
                                     <i class="fas fa-user-gear"></i> Usuarios
@@ -2046,7 +2046,7 @@
                 <div class="col-6 col-lg-3">
                     <h4 class="emp-footer__title">Administración</h4>
                     <ul class="emp-footer__links">
-                        <li><a href="{% url 'admin:index' %}">Django admin</a></li>
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
                         <li><a href="{% url 'admin:accounts_usuario_changelist' %}">Usuarios</a></li>
                         <li><a href="{% url 'admin:auth_group_changelist' %}">Grupos y roles</a></li>
                         <li><a href="/api/users/me/" target="_blank" rel="noopener">API de usuarios</a></li>
