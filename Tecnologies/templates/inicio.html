@@ -1,144 +1,2542 @@
-
-
-<html lang="es"><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Empire Tecnologies Inc | Inicio</title>
+    <meta name="author" content="Juan Valencia">
+    <meta name="description" content="Empire Tecnologies Inc - Desarrollo de software a medida, aplicaciones móviles, sistemas de gestión y soluciones con inteligencia artificial.">
+    <meta name="keywords" content="desarrollo de software, sistemas web, aplicaciones móviles, inteligencia artificial, Empire Tecnologies">
+
+    <title>Empire Tecnologies Inc | Software a la medida para tu negocio</title>
 
     {% load static %}
-    <link rel="shortcut icon" href="img/buildings-fill.svg" type="image/x-icon">
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/buildings-fill.svg' %}">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+          crossorigin="anonymous">
+
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- custom css -->
     <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;display=swap" rel="stylesheet"> 
-</head>
 
+    {% if request.user.is_staff %}
+    <!-- =====================================================
+         Panel de administracion (solo para cuentas staff).
+         Los estilos van aqui, dentro de este mismo template, para
+         no necesitar una hoja de estilos adicional.
+         ===================================================== -->
+    <style>
+        /* ---------- Cabecera del panel ---------- */
+        .emp-adm-header {
+            position: relative;
+            padding: 9.5rem 0 4.5rem;
+            color: #ffffff;
+            background: linear-gradient(150deg, var(--empire-primary) 0%, #060c1c 100%);
+        }
 
-<body>
-    <header>
-        <nav>
-            <a href="#">Inicio</a>
-            <a href="#contact">Contacto</a>
-            <a href="#servic">Servicios</a>
+        .emp-adm-header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 46px 46px;
+            pointer-events: none;
+        }
 
-            {% if request.user.is_authenticated %}
-            <a class="sesion" href="{% url 'logout' %}">Cerrar sesion</a>
-            {% else %}
-        <a class="sesion" href="{% url 'login' %}">Iniciar Sesión</a>
+        .emp-adm-header__inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .emp-adm-header__title {
+            margin: 0.9rem 0 0.6rem;
+            font-size: clamp(1.9rem, 4vw, 2.9rem);
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .emp-adm-header__title span {
+            color: #ff8b95;
+        }
+
+        .emp-adm-header__text {
+            max-width: 660px;
+            margin: 0 0 1.5rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .emp-adm-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.32rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #ffffff;
+            background: rgba(230, 57, 70, 0.22);
+            border: 1px solid rgba(255, 139, 149, 0.45);
+        }
+
+        .emp-adm-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.5rem;
+            margin-bottom: 1.7rem;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .emp-adm-meta i {
+            margin-right: 0.45rem;
+            color: #ff8b95;
+        }
+
+        .emp-adm-meta strong {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .emp-adm-header__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        /* ---------- Tarjetas de indicadores ---------- */
+        .emp-adm-section--alt {
+            background: var(--empire-bg);
+        }
+
+        .emp-adm-kpi {
+            height: 100%;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid var(--empire-border);
+            border-radius: var(--empire-radius);
+            box-shadow: 0 12px 34px rgba(15, 27, 61, 0.06);
+        }
+
+        .emp-adm-kpi__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .emp-adm-kpi__icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--empire-primary) 0%, var(--empire-primary-light) 100%);
+        }
+
+        .emp-adm-kpi__value {
+            margin: 0;
+            font-size: clamp(1.5rem, 3vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--empire-primary);
+        }
+
+        .emp-adm-kpi__label {
+            margin: 0.2rem 0 0.65rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--empire-muted);
+        }
+
+        .emp-adm-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .emp-adm-trend--up {
+            color: #0b6b3a;
+        }
+
+        .emp-adm-trend--down {
+            color: var(--empire-accent-dark);
+        }
+
+        .emp-adm-trend--flat {
+            color: var(--empire-muted);
+        }
+
+        /* ---------- Paneles ---------- */
+        .emp-adm-panel {
+            height: 100%;
+            padding: 1.75rem;
+            background: #ffffff;
+            border: 1px solid var(--empire-border);
+            border-radius: var(--empire-radius);
+            box-shadow: 0 12px 34px rgba(15, 27, 61, 0.06);
+        }
+
+        .emp-adm-panel__head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .emp-adm-panel__title {
+            margin: 0;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: var(--empire-primary);
+        }
+
+        .emp-adm-panel__title i {
+            margin-right: 0.45rem;
+            color: var(--empire-accent);
+        }
+
+        .emp-adm-note {
+            margin: 0.9rem 0 0;
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--empire-muted);
+        }
+
+        /* ---------- Tabla de proyectos ---------- */
+        .emp-adm-scroll {
+            overflow-x: auto;
+        }
+
+        .emp-adm-table {
+            width: 100%;
+            margin: 0;
+            font-size: 0.9rem;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .emp-adm-table th {
+            padding: 0.7rem 0.85rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: left;
+            white-space: nowrap;
+            color: var(--empire-muted);
+            background: var(--empire-bg);
+            border-bottom: 1px solid var(--empire-border);
+        }
+
+        .emp-adm-table td {
+            padding: 0.85rem;
+            vertical-align: middle;
+            color: var(--empire-text);
+            border-bottom: 1px solid var(--empire-border);
+        }
+
+        .emp-adm-table tbody tr:hover {
+            background: rgba(15, 27, 61, 0.02);
+        }
+
+        .emp-adm-table__name {
+            display: block;
+            font-weight: 600;
+            color: var(--empire-primary);
+        }
+
+        .emp-adm-table__sub {
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--empire-muted);
+        }
+
+        /* ---------- Estados y prioridades ---------- */
+        .emp-adm-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.28rem 0.65rem;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .emp-adm-status--prod {
+            color: #0b6b3a;
+            background: #e7f8ef;
+            border-color: rgba(11, 107, 58, 0.25);
+        }
+
+        .emp-adm-status--dev {
+            color: #1c2d5e;
+            background: #eef2fb;
+            border-color: rgba(28, 45, 94, 0.2);
+        }
+
+        .emp-adm-status--review {
+            color: #8a5a00;
+            background: #fff6e5;
+            border-color: rgba(138, 90, 0, 0.22);
+        }
+
+        .emp-adm-status--plan {
+            color: #4b5563;
+            background: #f3f4f6;
+            border-color: rgba(75, 85, 99, 0.2);
+        }
+
+        .emp-adm-prio {
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .emp-adm-prio--alta {
+            color: var(--empire-accent-dark);
+        }
+
+        .emp-adm-prio--media {
+            color: #8a5a00;
+        }
+
+        .emp-adm-prio--baja {
+            color: var(--empire-muted);
+        }
+
+        /* ---------- Barras de progreso ---------- */
+        .emp-adm-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            min-width: 132px;
+        }
+
+        .emp-adm-progress__track {
+            flex: 1 1 auto;
+            height: 7px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #eef1f6;
+        }
+
+        .emp-adm-progress__bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--empire-primary) 0%, var(--empire-primary-light) 100%);
+        }
+
+        .emp-adm-progress__bar.is-low {
+            background: linear-gradient(90deg, var(--empire-accent) 0%, var(--empire-accent-dark) 100%);
+        }
+
+        .emp-adm-progress__value {
+            flex: 0 0 44px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-align: right;
+            color: var(--empire-primary);
+        }
+
+        /* ---------- Buscador y filtros de la tabla ---------- */
+        .emp-adm-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .emp-adm-toolbar input,
+        .emp-adm-toolbar select {
+            padding: 0.55rem 0.75rem;
+            font-size: 0.85rem;
+            color: var(--empire-text);
+            background: #ffffff;
+            border: 1px solid var(--empire-border);
+            border-radius: 10px;
+        }
+
+        .emp-adm-toolbar input {
+            flex: 1 1 240px;
+        }
+
+        .emp-adm-toolbar input:focus,
+        .emp-adm-toolbar select:focus {
+            outline: none;
+            border-color: rgba(230, 57, 70, 0.5);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
+        }
+
+        .emp-adm-empty {
+            display: none;
+            padding: 1.5rem;
+            font-size: 0.88rem;
+            text-align: center;
+            color: var(--empire-muted);
+        }
+
+        .emp-adm-empty.is-visible {
+            display: block;
+        }
+
+        /* ---------- Gráficas ---------- */
+        .emp-adm-chart {
+            position: relative;
+            width: 100%;
+            height: 290px;
+        }
+
+        .emp-adm-chart canvas {
+            max-width: 100%;
+        }
+
+        /* ---------- Medidores, bitácora, alertas y servicios ---------- */
+        .emp-adm-meter {
+            margin-bottom: 1.05rem;
+        }
+
+        .emp-adm-meter:last-child {
+            margin-bottom: 0;
+        }
+
+        .emp-adm-meter__row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.35rem;
+            font-size: 0.85rem;
+        }
+
+        .emp-adm-meter__label {
+            font-weight: 500;
+            color: var(--empire-text);
+        }
+
+        .emp-adm-meter__value {
+            font-weight: 600;
+            color: var(--empire-primary);
+        }
+
+        .emp-adm-meter__track {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #eef1f6;
+        }
+
+        .emp-adm-meter__bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--empire-accent) 0%, var(--empire-primary-light) 100%);
+        }
+
+        .emp-adm-timeline {
+            position: relative;
+            margin: 0;
+            padding: 0 0 0 1.4rem;
+            list-style: none;
+        }
+
+        .emp-adm-timeline::before {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 0.35rem;
+            bottom: 0.35rem;
+            width: 2px;
+            background: var(--empire-border);
+        }
+
+        .emp-adm-timeline li {
+            position: relative;
+            padding-bottom: 1.15rem;
+        }
+
+        .emp-adm-timeline li:last-child {
+            padding-bottom: 0;
+        }
+
+        .emp-adm-timeline li::before {
+            content: "";
+            position: absolute;
+            left: -1.4rem;
+            top: 0.35rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid var(--empire-primary-light);
+        }
+
+        .emp-adm-timeline__time {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--empire-muted);
+        }
+
+        .emp-adm-timeline__text {
+            margin: 0.15rem 0 0;
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: var(--empire-text);
+        }
+
+        .emp-adm-timeline__text strong {
+            font-weight: 600;
+            color: var(--empire-primary);
+        }
+
+        .emp-adm-alert {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.9rem 1rem;
+            margin-bottom: 0.7rem;
+            font-size: 0.85rem;
+            border: 1px solid var(--empire-border);
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .emp-adm-alert:last-child {
+            margin-bottom: 0;
+        }
+
+        .emp-adm-alert i {
+            margin-top: 0.15rem;
+        }
+
+        .emp-adm-alert--crit {
+            color: #8d1119;
+            background: #fdf1f2;
+            border-color: rgba(193, 18, 31, 0.28);
+        }
+
+        .emp-adm-alert--warn {
+            color: #7a5200;
+            background: #fff8ea;
+            border-color: rgba(138, 90, 0, 0.25);
+        }
+
+        .emp-adm-alert--info {
+            color: #22335f;
+            background: #f3f6fd;
+            border-color: rgba(28, 45, 94, 0.18);
+        }
+
+        .emp-adm-service {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            font-size: 0.88rem;
+            border-bottom: 1px dashed var(--empire-border);
+        }
+
+        .emp-adm-service:last-child {
+            border-bottom: 0;
+        }
+
+        .emp-adm-service__name {
+            font-weight: 500;
+            color: var(--empire-text);
+        }
+
+        .emp-adm-service__name i {
+            margin-right: 0.5rem;
+            color: var(--empire-muted);
+        }
+
+        .emp-adm-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .emp-adm-chiprow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .emp-adm-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--empire-primary-light);
+            background: var(--empire-bg);
+            border: 1px solid var(--empire-border);
+            border-radius: 999px;
+        }
+
+        .emp-adm-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: var(--empire-primary);
+            text-decoration: none;
+            background: #ffffff;
+            border: 1px solid var(--empire-border);
+            border-radius: 10px;
+            transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .emp-adm-btn:hover,
+        .emp-adm-btn:focus {
+            color: var(--empire-primary);
+            background: var(--empire-bg);
+            border-color: rgba(15, 27, 61, 0.25);
+        }
+
+        .emp-adm-btn--accent {
+            color: #ffffff;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--empire-accent) 0%, var(--empire-accent-dark) 100%);
+        }
+
+        .emp-adm-btn--accent:hover,
+        .emp-adm-btn--accent:focus {
+            color: #ffffff;
+            filter: brightness(1.06);
+        }
+
+        /* ---------- Responsive y accesibilidad ---------- */
+        @media (max-width: 991.98px) {
+            .emp-adm-header {
+                padding: 7.5rem 0 4rem;
+            }
+
+            .emp-adm-chart {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .emp-adm-panel,
+            .emp-adm-kpi {
+                padding: 1.35rem;
+            }
+
+            .emp-adm-chart {
+                height: 220px;
+            }
+
+            .emp-adm-table {
+                font-size: 0.84rem;
+            }
+
+            .emp-adm-header__actions .emp-btn,
+            .emp-adm-actions .emp-adm-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .emp-adm-btn {
+                transition: none;
+            }
+        }
+    </style>
     {% endif %}
-        </nav>
-        <section class="textos-header">
+</head>
+<body>
 
-            <h2>Bienvenido! {{request.user.username}}</h2>
-            <h1>Tu lo sueñas nosotros lo realizamos!</h1>
-            <h2>Empire Tecnologies 👨‍💻</h2>
-        </section>
-        <div class="wave" style="height: 150px; overflow: hidden;"><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-            </svg></div>
-    </header>
-    <main>
-        <section class="contenedor sobre-nosotros" id="servic">
-            <h2 class="titulo">Nuestro Servicio</h2>
-            <div class="contenedor-sobre-nosotros">
-                <img src= "{% static 'img/IA.jpg' %}" alt="" class="imagen-about-us">
-                <div class="contenido-textos">
-                    <h3><span>1</span>Los mejores servicios</h3>
-                    <p>Somos una empresa que fomenta tu creatividad, realizamos los mejores sistemas para
-                        tu negocio.</p>
-                    <h3><span>2</span>Los mejores servicios</h3>
-                    <p>Fomentamos tu creatividad, donde quiera a la hora que quieras realizaremos el sistema
-                        que mejor te parezca.</p>
-                </div>
-            </div>
-        </section>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg emp-navbar fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand emp-brand" href="{% url 'index' %}">
+                <img src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="38" height="38">
+                <span class="emp-brand__text">Empire<strong>Tecnologies</strong></span>
+            </a>
 
-       
-        <section class="clientes contenedor">
-            <h2 class="titulo">Clientes</h2>
-            <div class="cards">
-                <div class="card">
-                    <img src="img/face1.jpg" alt="">
-                    <div class="contenido-texto-card">
-                        <h4>Name</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
-                    </div>
+            <button class="navbar-toggler emp-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false"
+                    aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav emp-nav__links ms-auto">
+                    {% if request.user.is_staff %}
+                    <li class="nav-item"><a class="nav-link" href="#resumen">Resumen</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#rendimiento">Rendimiento</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#actividad">Actividad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#usuarios">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sistema">Sistema</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portafolio">Portafolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proceso">Proceso</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                    {% endif %}
+                </ul>
+
+                <div class="emp-nav__actions">
+                    {% if request.user.is_authenticated %}
+                    <span class="emp-user">
+                        <i class="fas fa-user-circle"></i> {{ request.user.username }}
+                    </span>
+                    {% if request.user.is_staff %}
+                    <a class="btn emp-btn emp-btn--ghost" href="{% url 'admin:index' %}">
+                        <i class="fas fa-gauge-high"></i> Django admin
+                    </a>
+                    {% endif %}
+                    <a class="btn emp-btn emp-btn--accent" href="{% url 'logout' %}">Cerrar sesión</a>
+                    {% else %}
+                    <a class="btn emp-btn emp-btn--ghost" href="{% url 'login' %}">Iniciar sesión</a>
+                    <a class="btn emp-btn emp-btn--accent" href="{% url 'register' %}">Crear cuenta</a>
+                    {% endif %}
                 </div>
-                <div class="card">
-                    <img src="img/face2.jpg" alt="">
-                    <div class="contenido-texto-card">
-                        <h4>Name</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="about-services">
-            <div class="contenedor">
-                <h2 class="titulo">Nuestros servicios</h2>
-                <div class="servicio-cont">
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion1.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
-                    </div>
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion4.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
-                    </div>
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion3.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <section id="contact"></section>
-        <div class="contenedor-footer">
-            <div class="content-foo">
-                <h4>Phone</h4>
-                <p>8296312</p>
-            </div>
-            <div class="content-foo">
-                <h4>Email</h4>
-                <p>8296312</p>
-            </div>
-            <div class="content-foo">
-                <h4>Location</h4>
-                <p>8296312</p>
             </div>
         </div>
-        <h2 class="titulo-final">© Empire Tecnologies | valenciaaa</h2>
+    </nav>
+
+    {% if request.user.is_staff %}
+    <!-- ================= CABECERA DEL PANEL (cuentas staff) ================= -->
+    <header class="emp-adm-header" id="inicio">
+        <div class="container emp-adm-header__inner">
+            <span class="emp-adm-badge">
+                <i class="fas fa-shield-halved"></i> Modo administrador
+            </span>
+
+            <h1 class="emp-adm-header__title">
+                Panel de administración, <span>{{ request.user.username }}</span>
+            </h1>
+
+            <p class="emp-adm-header__text">
+                Vista general de la operación: proyectos activos, rendimiento del equipo,
+                facturación y estado del sistema. Todo lo crítico, en una sola pantalla.
+            </p>
+
+            {# Estos datos vienen del usuario autenticado (son reales, no de ejemplo). #}
+            <div class="emp-adm-meta">
+                <span>
+                    <i class="fas fa-user-shield"></i>
+                    Rol: <strong>{% if request.user.is_superuser %}Superusuario{% else %}Staff{% endif %}</strong>
+                </span>
+                <span>
+                    <i class="fas fa-envelope"></i>
+                    {{ request.user.email|default:"correo no registrado" }}
+                </span>
+                <span>
+                    <i class="fas fa-users"></i>
+                    Grupos:
+                    <strong>{% for grupo in request.user.groups.all %}{{ grupo.name }}{% if not forloop.last %}, {% endif %}{% empty %}sin grupo asignado{% endfor %}</strong>
+                </span>
+                <span>
+                    <i class="fas fa-clock"></i>
+                    Sesión iniciada: <strong>{{ request.user.last_login|date:"d M Y, H:i"|default:"primera sesión" }}</strong>
+                </span>
+                <span>
+                    <i class="fas fa-calendar-check"></i>
+                    Cuenta creada: <strong>{{ request.user.date_joined|date:"d M Y" }}</strong>
+                </span>
+            </div>
+
+            <div class="emp-adm-header__actions">
+                <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="{% url 'admin:index' %}">
+                    <i class="fas fa-gauge-high"></i> Abrir Django admin
+                </a>
+                <a class="btn emp-btn emp-btn--light emp-btn--lg" href="{% url 'admin:accounts_usuario_changelist' %}">
+                    <i class="fas fa-user-gear"></i> Gestionar usuarios
+                </a>
+                <a class="btn emp-btn emp-btn--ghost emp-btn--lg" href="{% url 'logout' %}">
+                    <i class="fas fa-right-from-bracket"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
+    </header>
+
+    {% else %}
+    <!-- ================= HERO PUBLICO ================= -->
+    <header class="emp-hero" id="inicio">
+        <div class="emp-hero__bg" role="img" aria-label="Equipo de Empire Tecnologies trabajando"></div>
+        <div class="emp-hero__overlay"></div>
+
+        <div class="container emp-hero__inner">
+            <span class="emp-badge">
+                <i class="fas fa-bolt"></i> Transformación digital a tu medida
+            </span>
+
+            <h1 class="emp-hero__title">
+                {% if request.user.is_authenticated %}
+                    Bienvenido, <span>{{ request.user.username }}</span>
+                {% else %}
+                    Diseñamos el software que <span>impulsa tu negocio</span>
+                {% endif %}
+            </h1>
+
+            <p class="emp-hero__text">
+                Somos el equipo de Empire Tecnologies: convertimos tus ideas en sistemas web, aplicaciones
+                y automatizaciones con inteligencia artificial, listas para crecer contigo.
+            </p>
+
+            <div class="emp-hero__actions">
+                <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="#contacto">
+                    <i class="fas fa-paper-plane"></i> Solicitar asesoría
+                </a>
+                <a class="btn emp-btn emp-btn--light emp-btn--lg" href="#servicios">
+                    <i class="fas fa-layer-group"></i> Ver servicios
+                </a>
+            </div>
+
+            <div class="emp-stats">
+                <div class="emp-stat">
+                    <p class="emp-stat__number"><span class="emp-count" data-count="120">0</span>+</p>
+                    <p class="emp-stat__label">Proyectos entregados</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number"><span class="emp-count" data-count="80">0</span>+</p>
+                    <p class="emp-stat__label">Clientes satisfechos</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number"><span class="emp-count" data-count="8">0</span></p>
+                    <p class="emp-stat__label">Años de experiencia</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number">24/7</p>
+                    <p class="emp-stat__label">Soporte y monitoreo</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="emp-wave" aria-hidden="true">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
+                      style="stroke: none; fill: #ffffff;"></path>
+            </svg>
+        </div>
+    </header>
+    {% endif %}
+
+    <main>
+        {% if request.user.is_staff %}
+
+       
+        <section class="emp-section emp-adm-section--alt" id="resumen">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Resumen</span>
+                    <h2 class="emp-title">Estado general de la operación</h2>
+                    <p class="emp-subtitle">
+                        Indicadores del mes en curso, avance de los proyectos y los datos de tu propia cuenta.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-diagram-project"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--up">
+                                    <i class="fas fa-arrow-trend-up"></i> +2 este mes
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value">8</p>
+                            <p class="emp-adm-kpi__label">Proyectos activos</p>
+                            <p class="emp-adm-note">3 en producción y 2 en desarrollo.</p>
+                        </article>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-headset"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--down">
+                                    <i class="fas fa-arrow-trend-up"></i> +5 esta semana
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value">23</p>
+                            <p class="emp-adm-kpi__label">Tickets abiertos</p>
+                            <p class="emp-adm-note">5 sin asignar y 2 escalados a nivel 2.</p>
+                        </article>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--up">
+                                    <i class="fas fa-arrow-trend-up"></i> +8,4%
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value">$24.500.000</p>
+                            <p class="emp-adm-kpi__label">Facturación del mes</p>
+                            <p class="emp-adm-note">Meta del mes: $22.000.000 (superada).</p>
+                        </article>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-server"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--flat">
+                                    <i class="fas fa-circle-check"></i> Sin incidencias
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value">99,98%</p>
+                            <p class="emp-adm-kpi__label">Disponibilidad (30 días)</p>
+                            <p class="emp-adm-note">Última caída: hace 47 días (12 min).</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="row g-4 mt-1">
+                    <div class="col-lg-7 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-gauge-high"></i>Avance del mes</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-calendar-day"></i> Septiembre 2026</span>
+                            </div>
+
+                            <div class="emp-adm-meter">
+                                <div class="emp-adm-meter__row">
+                                    <span class="emp-adm-meter__label">Entregas a tiempo</span>
+                                    <span class="emp-adm-meter__value">94%</span>
+                                </div>
+                                <div class="emp-adm-meter__track">
+                                    <div class="emp-adm-meter__bar" style="width: 94%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-meter">
+                                <div class="emp-adm-meter__row">
+                                    <span class="emp-adm-meter__label">Ocupación del equipo</span>
+                                    <span class="emp-adm-meter__value">82%</span>
+                                </div>
+                                <div class="emp-adm-meter__track">
+                                    <div class="emp-adm-meter__bar" style="width: 82%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-meter">
+                                <div class="emp-adm-meter__row">
+                                    <span class="emp-adm-meter__label">Cobertura de pruebas automatizadas</span>
+                                    <span class="emp-adm-meter__value">87%</span>
+                                </div>
+                                <div class="emp-adm-meter__track">
+                                    <div class="emp-adm-meter__bar" style="width: 87%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-meter">
+                                <div class="emp-adm-meter__row">
+                                    <span class="emp-adm-meter__label">Satisfacción del cliente</span>
+                                    <span class="emp-adm-meter__value">96%</span>
+                                </div>
+                                <div class="emp-adm-meter__track">
+                                    <div class="emp-adm-meter__bar" style="width: 96%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-id-badge"></i>Mi cuenta</h3>
+                                {% if request.user.is_superuser %}
+                                <span class="emp-adm-status emp-adm-status--prod">
+                                    <i class="fas fa-user-shield"></i> Superusuario
+                                </span>
+                                {% else %}
+                                <span class="emp-adm-status emp-adm-status--dev">
+                                    <i class="fas fa-user-gear"></i> Staff
+                                </span>
+                                {% endif %}
+                            </div>
+
+                            {# Datos reales del usuario autenticado (no son de ejemplo). #}
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-user"></i>Usuario</span>
+                                <span>{{ request.user.username }}</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-envelope"></i>Correo</span>
+                                <span>{{ request.user.email|default:"no registrado" }}</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-users"></i>Grupos</span>
+                                <span>{% for grupo in request.user.groups.all %}{{ grupo.name }}{% if not forloop.last %}, {% endif %}{% empty %}ninguno{% endfor %}</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-clock"></i>Última sesión</span>
+                                <span>{{ request.user.last_login|date:"d M Y, H:i"|default:"primera sesión" }}</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-calendar-check"></i>Alta en el sistema</span>
+                                <span>{{ request.user.date_joined|date:"d M Y" }}</span>
+                            </div>
+
+                            <div class="emp-adm-actions mt-3">
+                                <a class="emp-adm-btn" href="{% url 'admin:accounts_usuario_changelist' %}">
+                                    <i class="fas fa-user-gear"></i> Gestionar usuarios
+                                </a>
+                                <a class="emp-adm-btn" href="/api/users/me/" target="_blank" rel="noopener">
+                                    <i class="fas fa-code"></i> Ver API
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================= PANEL: PROYECTOS ACTIVOS ================= -->
+        <section class="emp-section" id="proyectos">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Proyectos</span>
+                    <h2 class="emp-title">Proyectos activos</h2>
+                    <p class="emp-subtitle">
+                        Avance, responsable, fecha de entrega y prioridad de cada trabajo en curso.
+                    </p>
+                </div>
+
+                <div class="emp-adm-panel emp-reveal">
+                    <div class="emp-adm-panel__head">
+                        <h3 class="emp-adm-panel__title"><i class="fas fa-diagram-project"></i>Tablero de proyectos</h3>
+                        <span class="emp-adm-chip">
+                            <i class="fas fa-list-check"></i>
+                            Mostrando <span id="empAdmCount">8</span> de <span id="empAdmTotal">8</span>
+                        </span>
+                    </div>
+
+                    <div class="emp-adm-chiprow">
+                        <span class="emp-adm-chip"><i class="fas fa-circle-check"></i> 3 en producción</span>
+                        <span class="emp-adm-chip"><i class="fas fa-code"></i> 2 en desarrollo</span>
+                        <span class="emp-adm-chip"><i class="fas fa-magnifying-glass-chart"></i> 2 en revisión</span>
+                        <span class="emp-adm-chip"><i class="fas fa-compass-drafting"></i> 1 en planificación</span>
+                    </div>
+
+                    <div class="emp-adm-toolbar">
+                        <label class="visually-hidden" for="empAdmSearch">Buscar proyecto</label>
+                        <input type="search" id="empAdmSearch" autocomplete="off"
+                               placeholder="Buscar por proyecto, cliente o responsable…">
+                        <label class="visually-hidden" for="empAdmEstado">Filtrar por estado</label>
+                        <select id="empAdmEstado">
+                            <option value="">Todos los estados</option>
+                            <option value="produccion">En producción</option>
+                            <option value="desarrollo">En desarrollo</option>
+                            <option value="revision">En revisión</option>
+                            <option value="planificacion">En planificación</option>
+                        </select>
+                        <button type="button" class="emp-adm-btn" id="empAdmReset">
+                            <i class="fas fa-rotate-left"></i> Limpiar
+                        </button>
+                    </div>
+
+                    <div class="emp-adm-scroll">
+                        <table class="emp-adm-table" id="empAdmTable">
+                            <caption class="visually-hidden">
+                                Proyectos activos con su estado, avance, responsable y prioridad
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Proyecto</th>
+                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Responsable</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Avance</th>
+                                    <th scope="col">Entrega</th>
+                                    <th scope="col">Prioridad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-estado="produccion">
+                                    <td>
+                                        <span class="emp-adm-table__name">Plataforma de gestión logística</span>
+                                        <span class="emp-adm-table__sub">EMP-2401</span>
+                                    </td>
+                                    <td>TransAndina S.A.S.</td>
+                                    <td>Laura Gómez</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">100%</span>
+                                        </div>
+                                    </td>
+                                    <td>12 ago 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
+                                </tr>
+                                <tr data-estado="produccion">
+                                    <td>
+                                        <span class="emp-adm-table__name">Portal de clientes</span>
+                                        <span class="emp-adm-table__sub">EMP-2412</span>
+                                    </td>
+                                    <td>Grupo Ferretero Norte</td>
+                                    <td>Mateo Ruiz</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">95%</span>
+                                        </div>
+                                    </td>
+                                    <td>30 ago 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
+                                </tr>
+                                <tr data-estado="produccion">
+                                    <td>
+                                        <span class="emp-adm-table__name">Portal de empleados</span>
+                                        <span class="emp-adm-table__sub">EMP-2388</span>
+                                    </td>
+                                    <td>Colegio Los Andes</td>
+                                    <td>Laura Gómez</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">100%</span>
+                                        </div>
+                                    </td>
+                                    <td>28 jul 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
+                                </tr>
+                                <tr data-estado="desarrollo">
+                                    <td>
+                                        <span class="emp-adm-table__name">App móvil de campo</span>
+                                        <span class="emp-adm-table__sub">EMP-2430</span>
+                                    </td>
+                                    <td>AgroSur</td>
+                                    <td>Juan Valencia</td>
+                                    <td><span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code"></i> En desarrollo</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 68%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">68%</span>
+                                        </div>
+                                    </td>
+                                    <td>15 sep 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
+                                </tr>
+                                <tr data-estado="desarrollo">
+                                    <td>
+                                        <span class="emp-adm-table__name">Analítica con inteligencia artificial</span>
+                                        <span class="emp-adm-table__sub">EMP-2441</span>
+                                    </td>
+                                    <td>Clínica San Rafael</td>
+                                    <td>Sara Moreno</td>
+                                    <td><span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code"></i> En desarrollo</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar is-low" style="width: 45%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">45%</span>
+                                        </div>
+                                    </td>
+                                    <td>10 oct 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
+                                </tr>
+                                <tr data-estado="revision">
+                                    <td>
+                                        <span class="emp-adm-table__name">Facturación electrónica</span>
+                                        <span class="emp-adm-table__sub">EMP-2425</span>
+                                    </td>
+                                    <td>Distribuidora Pacífico</td>
+                                    <td>Andrés Torres</td>
+                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-magnifying-glass-chart"></i> En revisión</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 82%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">82%</span>
+                                        </div>
+                                    </td>
+                                    <td>22 sep 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
+                                </tr>
+                                <tr data-estado="revision">
+                                    <td>
+                                        <span class="emp-adm-table__name">Integración de pagos</span>
+                                        <span class="emp-adm-table__sub">EMP-2437</span>
+                                    </td>
+                                    <td>EduTech Colombia</td>
+                                    <td>Mateo Ruiz</td>
+                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-magnifying-glass-chart"></i> En revisión</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar" style="width: 54%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">54%</span>
+                                        </div>
+                                    </td>
+                                    <td>28 sep 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
+                                </tr>
+                                <tr data-estado="planificacion">
+                                    <td>
+                                        <span class="emp-adm-table__name">Inventarios y bodegas</span>
+                                        <span class="emp-adm-table__sub">EMP-2450</span>
+                                    </td>
+                                    <td>Supermercados La 14</td>
+                                    <td>Camila Díaz</td>
+                                    <td><span class="emp-adm-status emp-adm-status--plan"><i class="fas fa-compass-drafting"></i> Planificación</span></td>
+                                    <td>
+                                        <div class="emp-adm-progress">
+                                            <div class="emp-adm-progress__track">
+                                                <div class="emp-adm-progress__bar is-low" style="width: 12%;"></div>
+                                            </div>
+                                            <span class="emp-adm-progress__value">12%</span>
+                                        </div>
+                                    </td>
+                                    <td>05 nov 2026</td>
+                                    <td><span class="emp-adm-prio emp-adm-prio--baja">Baja</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="emp-adm-empty" id="empAdmEmpty">
+                        <i class="fas fa-circle-info"></i> No hay proyectos que coincidan con la búsqueda.
+                    </p>
+                    <p class="emp-adm-note">
+                        Proyectos de demostración: se reemplazarán por datos reales cuando exista el
+                        modelo de Proyectos y la vista envíe el listado como contexto.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- ================= PANEL: RENDIMIENTO ================= -->
+        <section class="emp-section emp-adm-section--alt" id="rendimiento">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Rendimiento</span>
+                    <h2 class="emp-title">Rendimiento del negocio y del equipo</h2>
+                    <p class="emp-subtitle">
+                        Facturación frente a la meta, distribución de los proyectos, soporte y carga de trabajo.
+                    </p>
+                </div>
+
+                <p class="emp-adm-note" id="empAdmChartNote" hidden>
+                    <i class="fas fa-triangle-exclamation"></i>
+                    No se pudieron cargar las gráficas (sin acceso al CDN de Chart.js). Los datos siguen
+                    disponibles en las tablas del panel.
+                </p>
+
+                <div class="row g-4">
+                    <div class="col-lg-8 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-line"></i>Facturación frente a la meta (millones de COP)</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-calendar"></i> Últimos 6 meses</span>
+                            </div>
+                            <div class="emp-adm-chart">
+                                <canvas id="empAdmIngresos" role="img"
+                                        aria-label="Gráfica de línea con la facturación mensual frente a la meta"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-pie"></i>Proyectos por estado</h3>
+                            </div>
+                            <div class="emp-adm-chart">
+                                <canvas id="empAdmEstados" role="img"
+                                        aria-label="Gráfica circular con la distribución de proyectos por estado"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-column"></i>Tickets de soporte por semana</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-headset"></i> Abiertos vs. resueltos</span>
+                            </div>
+                            <div class="emp-adm-chart">
+                                <canvas id="empAdmTickets" role="img"
+                                        aria-label="Gráfica de barras con tickets abiertos y resueltos por semana"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-users-gear"></i>Carga por responsable</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-percent"></i> Ocupación actual</span>
+                            </div>
+                            <div class="emp-adm-chart">
+                                <canvas id="empAdmEquipo" role="img"
+                                        aria-label="Gráfica de barras horizontales con la carga de trabajo por responsable"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================= PANEL: ACTIVIDAD ================= -->
+        <section class="emp-section" id="actividad">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Actividad</span>
+                    <h2 class="emp-title">Actividad reciente y alertas</h2>
+                    <p class="emp-subtitle">
+                        Lo último que ha ocurrido en la plataforma y lo que requiere tu atención hoy.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-7 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Bitácora</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-circle"></i> Actualizado hace 4 min</span>
+                            </div>
+
+                            <ul class="emp-adm-timeline">
+                                <li>
+                                    <span class="emp-adm-timeline__time">Hoy · 09:12</span>
+                                    <p class="emp-adm-timeline__text">
+                                        Nuevo registro desde la web: <strong>oscar.gomez@empiretec.com</strong>
+                                        añadido al grupo <strong>Usuarios</strong>.
+                                    </p>
+                                </li>
+                                <li>
+                                    <span class="emp-adm-timeline__time">Hoy · 08:40</span>
+                                    <p class="emp-adm-timeline__text">
+                                        Despliegue <strong>v2.4.1</strong> en producción: Portal de clientes
+                                        (sin errores en la verificación posterior).
+                                    </p>
+                                </li>
+                                <li>
+                                    <span class="emp-adm-timeline__time">Hoy · 07:55</span>
+                                    <p class="emp-adm-timeline__text">
+                                        Respaldo automático de la base de datos verificado correctamente
+                                        (MySQL, 214 MB).
+                                    </p>
+                                </li>
+                                <li>
+                                    <span class="emp-adm-timeline__time">Ayer · 17:20</span>
+                                    <p class="emp-adm-timeline__text">
+                                        Ticket <strong>#4821</strong> escalado a soporte nivel 2 por
+                                        Distribuidora Pacífico.
+                                    </p>
+                                </li>
+                                <li>
+                                    <span class="emp-adm-timeline__time">Ayer · 15:02</span>
+                                    <p class="emp-adm-timeline__text">
+                                        El proyecto <strong>App móvil de campo</strong> pasó a 68% de avance;
+                                        entrega prevista el 15 de septiembre.
+                                    </p>
+                                </li>
+                                <li>
+                                    <span class="emp-adm-timeline__time">16 sep · 11:30</span>
+                                    <p class="emp-adm-timeline__text">
+                                        Pago confirmado de Distribuidora Pacífico por
+                                        <strong>$4.800.000</strong> (factura FE-2291).
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-bell"></i>Alertas</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-list"></i> 3 abiertas</span>
+                            </div>
+
+                            <div class="emp-adm-alert emp-adm-alert--crit">
+                                <i class="fas fa-circle-exclamation"></i>
+                                <div>
+                                    <strong>Proyecto en riesgo:</strong> Integración de pagos vence el
+                                    28 de septiembre y sigue en revisión con un 54% de avance.
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-alert emp-adm-alert--warn">
+                                <i class="fas fa-triangle-exclamation"></i>
+                                <div>
+                                    <strong>5 tickets sin asignar</strong> desde hace más de 12 horas.
+                                    Conviene repartirlos entre el equipo de soporte.
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-alert emp-adm-alert--info">
+                                <i class="fas fa-certificate"></i>
+                                <div>
+                                    El certificado TLS del sitio se renueva automáticamente en
+                                    <strong>12 días</strong>. No requiere acción.
+                                </div>
+                            </div>
+
+                            <div class="emp-adm-actions mt-3">
+                                <a class="emp-adm-btn" href="{% url 'admin:index' %}">
+                                    <i class="fas fa-gauge-high"></i> Ir al panel de Django
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ================= PANEL: USUARIOS ================= -->
+        <section class="emp-section emp-adm-section--alt" id="usuarios">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Usuarios</span>
+                    <h2 class="emp-title">Usuarios y roles</h2>
+                    <p class="emp-subtitle">
+                        Altas recientes y reparto por rol. La gestión completa se hace en el panel de Django.
+                    </p>
+                </div>
+
+                <div class="emp-adm-panel emp-reveal">
+                    <div class="emp-adm-panel__head">
+                        <h3 class="emp-adm-panel__title"><i class="fas fa-user-group"></i>Altas recientes</h3>
+                        <a class="emp-adm-btn" href="{% url 'admin:accounts_usuario_changelist' %}">
+                            <i class="fas fa-user-gear"></i> Gestionar usuarios
+                        </a>
+                    </div>
+
+                    <div class="emp-adm-scroll">
+                        <table class="emp-adm-table">
+                            <caption class="visually-hidden">Usuarios recientes con su rol y estado</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Último acceso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="emp-adm-table__name">l.gomez</span></td>
+                                    <td>l.gomez@empiretec.com</td>
+                                    <td>Administrador</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
+                                    <td>Hoy · 09:04</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="emp-adm-table__name">m.ruiz</span></td>
+                                    <td>m.ruiz@empiretec.com</td>
+                                    <td>Vendedor</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
+                                    <td>Hoy · 08:31</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="emp-adm-table__name">a.torres</span></td>
+                                    <td>a.torres@empiretec.com</td>
+                                    <td>Cliente</td>
+                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
+                                    <td>Ayer · 16:47</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="emp-adm-table__name">s.moreno</span></td>
+                                    <td>s.moreno@empiretec.com</td>
+                                    <td>Usuario</td>
+                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-clock"></i> Invitación pendiente</span></td>
+                                    <td>Sin acceso</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="emp-adm-table__name">c.diaz</span></td>
+                                    <td>c.diaz@empiretec.com</td>
+                                    <td>Usuario</td>
+                                    <td><span class="emp-adm-status emp-adm-status--plan"><i class="fas fa-pause"></i> Inactivo</span></td>
+                                    <td>02 ago 2026</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="emp-adm-note">
+                        Registro de ejemplo: los usuarios reales se consultan en Django admin
+                        (<code>/admin/accounts/usuario/</code>).
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- ================= PANEL: SISTEMA ================= -->
+        <section class="emp-section" id="sistema">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Sistema</span>
+                    <h2 class="emp-title">Estado del sistema y accesos rápidos</h2>
+                    <p class="emp-subtitle">
+                        Servicios de la plataforma y atajos directos a las herramientas de administración.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-7 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-server"></i>Servicios</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-signal"></i> Todo operativo</span>
+                            </div>
+
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-code"></i>API REST (/api/)</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Operativa · 42 ms</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-database"></i>Base de datos MySQL</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Operativa · 12 ms</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-cloud-arrow-up"></i>Copias de seguridad</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Verificado · hoy 07:55</span>
+                            </div>
+                            <div class="emp-adm-service">
+                                <span class="emp-adm-service__name"><i class="fas fa-rocket"></i>Último despliegue</span>
+                                <span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code-branch"></i> v2.4.1 · hace 3 h</span>
+                            </div>
+
+                            <p class="emp-adm-note">
+                                Estado de ejemplo: se conectará a las métricas reales de despliegue y monitoreo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5 emp-reveal">
+                        <div class="emp-adm-panel">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-bolt"></i>Accesos rápidos</h3>
+                            </div>
+
+                            <div class="emp-adm-actions">
+                                <a class="emp-adm-btn emp-adm-btn--accent" href="{% url 'admin:index' %}">
+                                    <i class="fas fa-gauge-high"></i> Django admin
+                                </a>
+                                <a class="emp-adm-btn" href="{% url 'admin:accounts_usuario_changelist' %}">
+                                    <i class="fas fa-user-gear"></i> Usuarios
+                                </a>
+                                <a class="emp-adm-btn" href="{% url 'admin:auth_group_changelist' %}">
+                                    <i class="fas fa-users-rectangle"></i> Grupos y roles
+                                </a>
+                                <a class="emp-adm-btn" href="/api/users/me/" target="_blank" rel="noopener">
+                                    <i class="fas fa-code"></i> API de usuarios
+                                </a>
+                                <a class="emp-adm-btn" href="{% url 'logout' %}">
+                                    <i class="fas fa-right-from-bracket"></i> Cerrar sesión
+                                </a>
+                            </div>
+
+                            <p class="emp-adm-note">
+                                Los mismos datos están disponibles para clientes no-HTML a través de la API
+                                REST (<code>/api/users/me/</code>).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% else %}
+    <!-- ================= SERVICIOS ================= -->
+        <section class="emp-section emp-servicios" id="servicios">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Qué hacemos</span>
+                    <h2 class="emp-title">Servicios pensados para tu crecimiento</h2>
+                    <p class="emp-subtitle">
+                        Cubrimos todo el ciclo de vida de tu producto digital: desde la idea y el diseño
+                        hasta el despliegue, la capacitación y el soporte continuo.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-code"></i></span>
+                            <h3 class="emp-card__title">Desarrollo web a medida</h3>
+                            <p class="emp-card__text">
+                                Portales, tiendas y sistemas hechos a la medida de tu operación, con
+                                interfaces rápidas, seguras y adaptadas a celulares.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-mobile-alt"></i></span>
+                            <h3 class="emp-card__title">Aplicaciones móviles</h3>
+                            <p class="emp-card__text">
+                                Apps multiplataforma para tus clientes y tu equipo, sincronizadas con tus
+                                sistemas y listas para publicar en las tiendas.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-chart-line"></i></span>
+                            <h3 class="emp-card__title">Sistemas de gestión</h3>
+                            <p class="emp-card__text">
+                                ERP, CRM e inventarios con reportes en tiempo real para que decidas con
+                                datos y no con suposiciones.
+                            </p>
+                        </article>
+                    </div>
+<div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-robot"></i></span>
+                            <h3 class="emp-card__title">Automatización e IA</h3>
+                            <p class="emp-card__text">
+                                Bots, asistentes y flujos automáticos que reducen tareas repetitivas y
+                                liberan tiempo para tu equipo.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-lightbulb"></i></span>
+                            <h3 class="emp-card__title">Asesoría tecnológica</h3>
+                            <p class="emp-card__text">
+                                Analizamos tus procesos y te entregamos una hoja de ruta clara, con costos
+                                y prioridades reales.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-headset"></i></span>
+                            <h3 class="emp-card__title">Soporte y mantenimiento</h3>
+                            <p class="emp-card__text">
+                                Monitoreo, respaldos, actualizaciones y acompañamiento permanente para que
+                                tu sistema nunca se detenga.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================= NOSOTROS ================= -->
+        <section class="emp-section emp-nosotros" id="nosotros">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6 emp-reveal">
+                        <div class="emp-media">
+                            <img src="{% static 'img/IA.jpg' %}"
+                                 alt="Soluciones de inteligencia artificial de Empire Tecnologies">
+                            <div class="emp-media__badge">
+                                <i class="fas fa-award"></i>
+                                <div>
+                                    <strong>Equipo certificado</strong>
+                                    <span>Trabajo bajo metodologías ágiles</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 emp-reveal">
+                        <span class="emp-eyebrow">Por qué elegirnos</span>
+                        <h2 class="emp-title emp-title--left">Un aliado tecnológico, no solo un proveedor</h2>
+                        <p class="emp-subtitle emp-subtitle--left">
+                            Escuchamos tu operación, proponemos soluciones realistas y te acompañamos
+                            después de la entrega. Así tu inversión en tecnología se convierte en
+                            resultados medibles.
+                        </p>
+
+                        <ul class="emp-list">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <strong>Entregas por etapas</strong>
+                                    <span>Ves avances cada semana y ajustas el rumbo sin sobresaltos.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <strong>Seguridad desde el diseño</strong>
+                                    <span>Buenas prácticas, roles y respaldos en cada proyecto.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <strong>Código y datos tuyos</strong>
+                                    <span>Te entregamos el proyecto documentado y listo para crecer.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <strong>Soporte real</strong>
+                                    <span>Un canal directo con el equipo que construyó tu sistema.</span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <a class="btn emp-btn emp-btn--accent" href="#contacto">
+                            <i class="fas fa-comments"></i> Hablemos de tu proyecto
+                        </a>
+                    </div>
+                </div>
+
+                <div class="emp-industries emp-reveal">
+                    <span class="emp-industries__label">Experiencia en sectores como</span>
+                    <ul>
+                        <li><i class="fas fa-store"></i> Retail</li>
+                        <li><i class="fas fa-heartbeat"></i> Salud</li>
+                        <li><i class="fas fa-graduation-cap"></i> Educación</li>
+                        <li><i class="fas fa-truck"></i> Logística</li>
+                        <li><i class="fas fa-industry"></i> Manufactura</li>
+                        <li><i class="fas fa-handshake"></i> Servicios</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    <!-- ================= PORTAFOLIO ================= -->
+        <section class="emp-section emp-portafolio" id="portafolio">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Nuestro trabajo</span>
+                    <h2 class="emp-title">Proyectos que ya están en marcha</h2>
+                    <p class="emp-subtitle">
+                        Una muestra de los sistemas que hemos construido para empresas que necesitaban
+                        ordenar su operación y vender más.
+                    </p>
+                </div>
+
+                <div class="emp-filters emp-reveal" role="group" aria-label="Filtrar portafolio">
+                    <button type="button" class="emp-filter is-active" data-filter="all">Todos</button>
+                    <button type="button" class="emp-filter" data-filter="web">Web</button>
+                    <button type="button" class="emp-filter" data-filter="movil">Móvil</button>
+                    <button type="button" class="emp-filter" data-filter="ia">IA</button>
+                </div>
+
+                <div class="row g-4" id="empGallery">
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img1.jpg' %}" alt="Portal corporativo desarrollado por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Portal corporativo</h3>
+                                <p>Presencia digital con panel administrativo y contenidos autogestionables.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img2.jpg' %}" alt="Tienda en línea desarrollada por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Tienda en línea</h3>
+                                <p>Catálogo, carrito y pagos integrados con reportes de ventas en vivo.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="movil">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img3.jpg' %}" alt="Aplicación móvil de pedidos desarrollada por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Móvil</span>
+                                <h3>App de pedidos</h3>
+                                <p>Toma de pedidos en calle con sincronización y modo sin conexión.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+<div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="ia">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img4.jpg' %}" alt="Panel de analítica con inteligencia artificial de Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">IA</span>
+                                <h3>Analítica con IA</h3>
+                                <p>Tableros que predicen demanda y alertan sobre desviaciones.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img5.jpg' %}" alt="Sistema de inventario desarrollado por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Sistema de inventario</h3>
+                                <p>Control de bodegas, entradas y salidas con trazabilidad total.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="movil">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img6.jpg' %}" alt="Aplicación móvil de gestión en campo de Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Móvil</span>
+                                <h3>Gestión en campo</h3>
+                                <p>Agenda, evidencias fotográficas y reportes desde el celular.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================= TESTIMONIOS ================= -->
+        <section class="emp-section emp-testimonios">
+            <div class="container">
+                <div class="emp-head emp-head--light emp-reveal">
+                    <span class="emp-eyebrow emp-eyebrow--light">Clientes</span>
+                    <h2 class="emp-title emp-title--light">Lo que dicen de nosotros</h2>
+                    <p class="emp-subtitle emp-subtitle--light">
+                        Trabajamos de cerca con cada equipo para que la tecnología se sienta sencilla.
+                    </p>
+                </div>
+
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-6 emp-reveal">
+                        <article class="emp-quote">
+                            <i class="fas fa-quote-left emp-quote__icon" aria-hidden="true"></i>
+                            <p>
+                                Pasamos de cuadernos y hojas de cálculo a un sistema que nos muestra las
+                                ventas del día en segundos. El equipo entendió nuestro negocio desde la
+                                primera reunión.
+                            </p>
+                            <footer class="emp-quote__author">
+                                <img src="{% static 'img/face1.jpg' %}" alt="Cliente del sector retail">
+                                <div>
+                                    <strong>Gerencia comercial</strong>
+                                    <span>Sector retail</span>
+                                </div>
+                            </footer>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 emp-reveal">
+                        <article class="emp-quote">
+                            <i class="fas fa-quote-left emp-quote__icon" aria-hidden="true"></i>
+                            <p>
+                                La app de campo redujo nuestros tiempos de reporte a la mitad. Además, el
+                                soporte responde rápido y siempre con soluciones claras.
+                            </p>
+                            <footer class="emp-quote__author">
+                                <img src="{% static 'img/face2.jpg' %}" alt="Cliente del sector logística">
+                                <div>
+                                    <strong>Dirección de operaciones</strong>
+                                    <span>Sector logística</span>
+                                </div>
+                            </footer>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================= PROCESO ================= -->
+        <section class="emp-section emp-proceso" id="proceso">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Cómo trabajamos</span>
+                    <h2 class="emp-title">Cuatro pasos claros, cero sorpresas</h2>
+                    <p class="emp-subtitle">
+                        Un proceso probado que mantiene tu proyecto visible y bajo control en todo momento.
+                    </p>
+                </div>
+
+                <div class="row g-4 emp-steps">
+                    <div class="col-md-6 col-lg-3 emp-reveal">
+                        <article class="emp-step">
+                            <span class="emp-step__num">01</span>
+                            <h3>Descubrimiento</h3>
+                            <p>Reuniones para entender tu operación, tus metas y tus restricciones.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 emp-reveal">
+                        <article class="emp-step">
+                            <span class="emp-step__num">02</span>
+                            <h3>Diseño y prototipo</h3>
+                            <p>Maquetas navegables para que apruebes la experiencia antes de programar.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 emp-reveal">
+                        <article class="emp-step">
+                            <span class="emp-step__num">03</span>
+                            <h3>Desarrollo y pruebas</h3>
+                            <p>Entregas semanales, pruebas contigo y ajustes sobre la marcha.</p>
+                        </article>
+                    </div>
+                    <div class="col-md-6 col-lg-3 emp-reveal">
+                        <article class="emp-step">
+                            <span class="emp-step__num">04</span>
+                            <h3>Lanzamiento y soporte</h3>
+                            <p>Capacitación, puesta en producción y acompañamiento continuo.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- ================= CONTACTO ================= -->
+        <section class="emp-section emp-contacto" id="contacto">
+            <div class="container">
+                <div class="row g-5 align-items-start">
+                    <div class="col-lg-5 emp-reveal">
+                        <span class="emp-eyebrow">Contacto</span>
+                        <h2 class="emp-title emp-title--left">Cuéntanos qué necesitas</h2>
+                        <p class="emp-subtitle emp-subtitle--left">
+                            Agenda una asesoría sin costo y te ayudamos a definir el punto de partida
+                            de tu proyecto.
+                        </p>
+
+                        <!-- Reemplaza estos datos por los de contacto reales de la empresa -->
+                        <ul class="emp-contact-list">
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <div>
+                                    <strong>Teléfono</strong>
+                                    <a href="tel:8296312">8296312</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>Correo</strong>
+                                    <a href="mailto:contacto@empiretec.com">contacto@empiretec.com</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <strong>Ubicación</strong>
+                                    <span>Colombia</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>Horario</strong>
+                                    <span>Lunes a viernes, 8:00 a.m. - 6:00 p.m.</span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <a class="btn emp-btn emp-btn--whatsapp" href="https://wa.me/1234567890"
+                           target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
+                        </a>
+                    </div>
+
+                    <div class="col-lg-7 emp-reveal">
+                        <form class="emp-form" id="contactForm" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="emp-form__label" for="cNombre">Nombre</label>
+                                    <input class="form-control emp-form__input" type="text" id="cNombre"
+                                           name="nombre" placeholder="Tu nombre" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="emp-form__label" for="cCorreo">Correo</label>
+                                    <input class="form-control emp-form__input" type="email" id="cCorreo"
+                                           name="correo" placeholder="tucorreo@empresa.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="emp-form__label" for="cServicio">¿Qué necesitas?</label>
+                                    <select class="form-select emp-form__input" id="cServicio" name="servicio">
+                                        <option value="Desarrollo web a medida">Desarrollo web a medida</option>
+                                        <option value="Aplicación móvil">Aplicación móvil</option>
+                                        <option value="Sistema de gestión">Sistema de gestión</option>
+                                        <option value="Automatización con IA">Automatización con IA</option>
+                                        <option value="Asesoría tecnológica">Asesoría tecnológica</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+<div class="col-12">
+                                    <label class="emp-form__label" for="cMensaje">Mensaje</label>
+                                    <textarea class="form-control emp-form__input" id="cMensaje" name="mensaje"
+                                              rows="4" placeholder="Cuéntanos brevemente sobre tu proyecto" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn emp-btn emp-btn--accent emp-btn--lg w-100">
+                                        <i class="fas fa-paper-plane"></i> Enviar mensaje
+                                    </button>
+                                    <p class="emp-form__note" id="formNote" role="status" aria-live="polite"></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+    <!-- ================= FOOTER ================= -->
+    <footer class="emp-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="emp-brand emp-brand--footer" href="#inicio">
+                        <img src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="38" height="38">
+                        <span class="emp-brand__text">Empire<strong>Tecnologies</strong></span>
+                    </a>
+                    <p class="emp-footer__text">
+                        Desarrollamos software a la medida, aplicaciones y automatizaciones que ayudan a
+                        las empresas a crecer con tecnología confiable.
+                    </p>
+                    <div class="emp-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                {% if request.user.is_staff %}
+                <div class="col-6 col-lg-2">
+                    <h4 class="emp-footer__title">Panel</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="#resumen">Resumen</a></li>
+                        <li><a href="#proyectos">Proyectos</a></li>
+                        <li><a href="#rendimiento">Rendimiento</a></li>
+                        <li><a href="#actividad">Actividad</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h4 class="emp-footer__title">Administración</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="{% url 'admin:index' %}">Django admin</a></li>
+                        <li><a href="{% url 'admin:accounts_usuario_changelist' %}">Usuarios</a></li>
+                        <li><a href="{% url 'admin:auth_group_changelist' %}">Grupos y roles</a></li>
+                        <li><a href="/api/users/me/" target="_blank" rel="noopener">API de usuarios</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="col-6 col-lg-2">
+                    <h4 class="emp-footer__title">Navegación</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#portafolio">Portafolio</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h4 class="emp-footer__title">Servicios</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="#servicios">Desarrollo web</a></li>
+                        <li><a href="#servicios">Aplicaciones móviles</a></li>
+                        <li><a href="#servicios">Sistemas de gestión</a></li>
+                        <li><a href="#servicios">Automatización e IA</a></li>
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="col-lg-3">
+                    <h4 class="emp-footer__title">Contacto</h4>
+                    <ul class="emp-footer__links emp-footer__links--contact">
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:8296312">8296312</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:contacto@empiretec.com">contacto@empiretec.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Colombia</li>
+                    </ul>
+                    {% if request.user.is_authenticated %}
+                    <a class="btn emp-btn emp-btn--ghost btn-sm w-100" href="{% url 'logout' %}">Cerrar sesión</a>
+                    {% else %}
+                    <a class="btn emp-btn emp-btn--accent btn-sm w-100" href="{% url 'login' %}">Iniciar sesión</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="emp-footer__bottom">
+                <p>&copy; <span id="empYear">2026</span> Empire Tecnologies Inc. Todos los derechos reservados.</p>
+                <p>Hecho con <i class="fas fa-heart" aria-hidden="true"></i> por el equipo de Empire Tecnologies</p>
+            </div>
+        </div>
     </footer>
 
-    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
-  <i class="fab fa-whatsapp"></i>
-</a>
+    <!-- Botones flotantes -->
+    {% if not request.user.is_staff %}
+    {# El botón de WhatsApp es de cara al público: en el panel de administración solo molesta. #}
+    <a class="emp-float emp-float--whatsapp" href="https://wa.me/1234567890" target="_blank" rel="noopener"
+       aria-label="Escribir por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    {% endif %}
+    <button type="button" class="emp-float emp-float--top" id="scrollTopBtn" aria-label="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+{% if request.user.is_staff %}
+    <!-- Gráficas del panel: Chart.js con versión fijada e integridad SRI -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+            integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"
+            crossorigin="anonymous"></script>
+    {% endif %}
 
-<a href="#top" class="scroll-top" id="scrollTopBtn" style="display: none;">
-  <i class="fas fa-arrow-up"></i>
-</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
 
-<script>
-  window.addEventListener('scroll', function () {
-    const btn = document.getElementById('scrollTopBtn');
-    if (window.scrollY > 400) {
-      btn.style.display = 'block';
-    } else {
-      btn.style.display = 'none';
-    }
-  });
-</script>
+    <script>
+        // Interacciones de la landing (JavaScript nativo, sin librerías adicionales)
+        (function () {
+            'use strict';
 
-</body></html>
+            // Año actual en el pie de página
+            var yearEl = document.getElementById('empYear');
+            if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+
+            // Navbar con fondo sólido al hacer scroll
+            var nav = document.getElementById('mainNav');
+            function updateNav() {
+                if (nav) { nav.classList.toggle('is-scrolled', window.scrollY > 40); }
+            }
+            updateNav();
+            window.addEventListener('scroll', updateNav, { passive: true });
+
+            // Cerrar el menú móvil al elegir una sección
+            var menu = document.getElementById('navMenu');
+            document.querySelectorAll('.emp-nav__links .nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (menu && menu.classList.contains('show') && window.bootstrap) {
+                        window.bootstrap.Collapse.getOrCreateInstance(menu).hide();
+                    }
+                });
+            });
+
+            // Resaltar el enlace de la sección que se está viendo
+            var sections = Array.prototype.slice.call(document.querySelectorAll('header[id], main section[id]'));
+            var navLinks = Array.prototype.slice.call(document.querySelectorAll('.emp-nav__links .nav-link'));
+            if ('IntersectionObserver' in window && sections.length) {
+                var spyObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) { return; }
+                        navLinks.forEach(function (link) {
+                            link.classList.toggle('is-active', link.getAttribute('href') === '#' + entry.target.id);
+                        });
+                    });
+                }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+                sections.forEach(function (section) { spyObserver.observe(section); });
+            }
+// Animación de aparición al hacer scroll
+            var revealEls = Array.prototype.slice.call(document.querySelectorAll('.emp-reveal'));
+            if ('IntersectionObserver' in window && revealEls.length) {
+                var revealObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) { return; }
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    });
+                }, { threshold: 0.15 });
+                revealEls.forEach(function (el) { revealObserver.observe(el); });
+            } else {
+                revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+            }
+
+            // Contadores animados de las estadísticas
+            function animateCounter(el) {
+                var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+                var duration = 1200;
+                var start = null;
+                function step(timestamp) {
+                    if (start === null) { start = timestamp; }
+                    var progress = Math.min((timestamp - start) / duration, 1);
+                    el.textContent = Math.floor(progress * target).toString();
+                    if (progress < 1) { window.requestAnimationFrame(step); }
+                }
+                window.requestAnimationFrame(step);
+            }
+            var counters = Array.prototype.slice.call(document.querySelectorAll('.emp-count'));
+            if ('IntersectionObserver' in window && counters.length) {
+                var counterObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) { return; }
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    });
+                }, { threshold: 0.6 });
+                counters.forEach(function (el) { counterObserver.observe(el); });
+            } else {
+                counters.forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
+            }
+
+            // Filtros del portafolio
+            var filterButtons = Array.prototype.slice.call(document.querySelectorAll('.emp-filter'));
+            var galleryItems = Array.prototype.slice.call(document.querySelectorAll('#empGallery .emp-item'));
+            filterButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var filter = button.getAttribute('data-filter');
+                    filterButtons.forEach(function (btn) { btn.classList.toggle('is-active', btn === button); });
+                    galleryItems.forEach(function (item) {
+                        var show = filter === 'all' || item.getAttribute('data-category') === filter;
+                        item.classList.toggle('is-hidden', !show);
+                    });
+                });
+            });
+
+            // Botón "volver arriba"
+            var topBtn = document.getElementById('scrollTopBtn');
+            if (topBtn) {
+                function updateTopBtn() {
+                    topBtn.classList.toggle('is-visible', window.scrollY > 400);
+                }
+                updateTopBtn();
+                window.addEventListener('scroll', updateTopBtn, { passive: true });
+                topBtn.addEventListener('click', function () {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+// Formulario de contacto: arma el mensaje y lo envía por WhatsApp
+            var form = document.getElementById('contactForm');
+            var note = document.getElementById('formNote');
+            if (form) {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var nombre = form.nombre.value.trim();
+                    var correo = form.correo.value.trim();
+                    var servicio = form.servicio.value;
+                    var mensaje = form.mensaje.value.trim();
+
+                    if (!nombre || !correo || !mensaje) {
+                        if (note) {
+                            note.textContent = 'Completa tu nombre, tu correo y el mensaje para continuar.';
+                            note.classList.add('is-error');
+                        }
+                        return;
+                    }
+
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                        if (note) {
+                            note.textContent = 'Revisa el correo: parece que falta algo.';
+                            note.classList.add('is-error');
+                        }
+                        return;
+                    }
+
+                    var texto = 'Hola Empire Tecnologies, soy ' + nombre + ' (' + correo + ').\n'
+                        + 'Servicio de interés: ' + servicio + '.\n'
+                        + 'Mensaje: ' + mensaje;
+
+                    window.open('https://wa.me/1234567890?text=' + encodeURIComponent(texto),
+                        '_blank', 'noopener');
+
+                    if (note) {
+                        note.textContent = '¡Listo! Abrimos WhatsApp con tu mensaje preparado para enviar.';
+                        note.classList.remove('is-error');
+                    }
+                    form.reset();
+                });
+            }
+        })();
+    </script>
+
+    {% if request.user.is_staff %}
+    <script>
+        // Panel de administración: filtros de la tabla de proyectos y gráficas (Chart.js).
+        (function () {
+            'use strict';
+
+            var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var palette = {
+                primary: '#0f1b3d',
+                primaryLight: '#1c2d5e',
+                accent: '#e63946',
+                accentDark: '#c1121f',
+                muted: '#6b7280',
+                border: '#e5e7eb',
+                green: '#0b6b3a',
+                amber: '#d9a441',
+                grey: '#9ca3af'
+            };
+
+            // -----------------------------------------------------------------
+            // Filtros de la tabla de proyectos (búsqueda libre + estado)
+            // -----------------------------------------------------------------
+            var tabla = document.getElementById('empAdmTable');
+            var buscador = document.getElementById('empAdmSearch');
+            var selectorEstado = document.getElementById('empAdmEstado');
+            var botonLimpiar = document.getElementById('empAdmReset');
+            var contador = document.getElementById('empAdmCount');
+            var total = document.getElementById('empAdmTotal');
+            var vacio = document.getElementById('empAdmEmpty');
+
+            if (tabla) {
+                var filas = Array.prototype.slice.call(tabla.querySelectorAll('tbody tr'));
+                if (total) { total.textContent = filas.length; }
+
+                var aplicarFiltros = function () {
+                    var texto = buscador ? buscador.value.trim().toLowerCase() : '';
+                    var estado = selectorEstado ? selectorEstado.value : '';
+                    var visibles = 0;
+
+                    filas.forEach(function (fila) {
+                        var coincideTexto = !texto || fila.textContent.toLowerCase().indexOf(texto) !== -1;
+                        var coincideEstado = !estado || fila.getAttribute('data-estado') === estado;
+                        var mostrar = coincideTexto && coincideEstado;
+                        fila.hidden = !mostrar;
+                        if (mostrar) { visibles += 1; }
+                    });
+
+                    if (contador) { contador.textContent = visibles; }
+                    if (vacio) { vacio.classList.toggle('is-visible', visibles === 0); }
+                };
+
+                if (buscador) { buscador.addEventListener('input', aplicarFiltros); }
+                if (selectorEstado) { selectorEstado.addEventListener('change', aplicarFiltros); }
+                if (botonLimpiar) {
+                    botonLimpiar.addEventListener('click', function () {
+                        if (buscador) { buscador.value = ''; }
+                        if (selectorEstado) { selectorEstado.value = ''; }
+                        aplicarFiltros();
+                    });
+                }
+
+                aplicarFiltros();
+            }
+
+            // -----------------------------------------------------------------
+            // Gráficas de rendimiento
+            // -----------------------------------------------------------------
+            var nota = document.getElementById('empAdmChartNote');
+            if (typeof Chart === 'undefined') {
+                // Sin CDN disponible: se avisa y el panel sigue siendo utilizable con las tablas.
+                if (nota) { nota.hidden = false; }
+                return;
+            }
+
+            Chart.defaults.font.family = "'Poppins', system-ui, sans-serif";
+            Chart.defaults.font.size = 12;
+            Chart.defaults.color = palette.muted;
+
+            var animacion = reduceMotion ? false : { duration: 700 };
+            var leyenda = {
+                position: 'bottom',
+                labels: { usePointStyle: true, boxWidth: 8, padding: 14 }
+            };
+
+            var dibujar = function (id, configuracion) {
+                var canvas = document.getElementById(id);
+                if (!canvas) { return; }
+                new Chart(canvas, configuracion);
+            };
+            // Facturación frente a la meta (últimos 6 meses, millones de COP)
+            dibujar('empAdmIngresos', {
+                type: 'line',
+                data: {
+                    labels: ['Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
+                    datasets: [
+                        {
+                            label: 'Facturación',
+                            data: [16.4, 18.1, 17.2, 21.6, 22.8, 24.5],
+                            borderColor: palette.accent,
+                            backgroundColor: 'rgba(230, 57, 70, 0.12)',
+                            borderWidth: 3,
+                            tension: 0.35,
+                            fill: true,
+                            pointRadius: 3,
+                            pointBackgroundColor: palette.accent
+                        },
+                        {
+                            label: 'Meta',
+                            data: [18, 18, 20, 20, 22, 22],
+                            borderColor: palette.primaryLight,
+                            borderWidth: 2,
+                            borderDash: [6, 5],
+                            tension: 0.25,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: animacion,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: leyenda,
+                        tooltip: {
+                            callbacks: {
+                                label: function (item) {
+                                    return item.dataset.label + ': ' + item.formattedValue + ' M COP';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: palette.border },
+                            ticks: {
+                                callback: function (valor) { return valor + 'M'; }
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Distribución de los proyectos por estado
+            dibujar('empAdmEstados', {
+                type: 'doughnut',
+                data: {
+                    labels: ['En producción', 'En desarrollo', 'En revisión', 'Planificación'],
+                    datasets: [{
+                        data: [3, 2, 2, 1],
+                        backgroundColor: [palette.green, palette.primaryLight, palette.amber, palette.grey],
+                        borderWidth: 0,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: animacion,
+                    cutout: '62%',
+                    plugins: {
+                        legend: leyenda,
+                        tooltip: {
+                            callbacks: {
+                                label: function (item) {
+                                    return item.label + ': ' + item.formattedValue + ' proyectos';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Tickets de soporte abiertos y resueltos por semana
+            dibujar('empAdmTickets', {
+                type: 'bar',
+                data: {
+                    labels: ['Sem 36', 'Sem 37', 'Sem 38', 'Sem 39'],
+                    datasets: [
+                        {
+                            label: 'Abiertos',
+                            data: [18, 21, 26, 23],
+                            backgroundColor: palette.accent,
+                            borderRadius: 6,
+                            maxBarThickness: 26
+                        },
+                        {
+                            label: 'Resueltos',
+                            data: [16, 24, 22, 19],
+                            backgroundColor: palette.primaryLight,
+                            borderRadius: 6,
+                            maxBarThickness: 26
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: animacion,
+                    plugins: {
+                        legend: leyenda,
+                        tooltip: {
+                            callbacks: {
+                                label: function (item) {
+                                    return item.dataset.label + ': ' + item.formattedValue + ' tickets';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: palette.border },
+                            ticks: { precision: 0 }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Ocupación actual de cada responsable
+            dibujar('empAdmEquipo', {
+                type: 'bar',
+                data: {
+                    labels: ['Laura Gómez', 'Mateo Ruiz', 'Andrés Torres', 'Sara Moreno', 'Camila Díaz'],
+                    datasets: [{
+                        label: 'Ocupación',
+                        data: [92, 78, 85, 61, 44],
+                        backgroundColor: [palette.accent, palette.primaryLight, palette.primary, palette.amber, palette.grey],
+                        borderRadius: 6,
+                        maxBarThickness: 20
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: animacion,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (item) {
+                                    return item.formattedValue + '% de ocupación';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: palette.border },
+                            ticks: {
+                                callback: function (valor) { return valor + '%'; }
+                            }
+                        },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        })();
+    </script>
+    {% endif %}
+</body>
+</html>

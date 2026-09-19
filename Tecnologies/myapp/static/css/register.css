@@ -1,67 +1,25 @@
-*{
-    margin: 0;
-    padding: 0;
+/* =====================================================
+   Empire Tecnologies - Complementos del Registro
+   Requiere: css/login.css (mismo diseño base del login)
+   ===================================================== */
+
+/* Nota de ayuda bajo los campos del registro */
+.login-hint {
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--empire-muted);
+    margin: 0.1rem 0 0;
 }
 
-body{
-    background-color: lightgray;
-}
-
-.navbar {
-    padding: 1rem;
-}
-
-.navbar-collapse {
-    align-items: center;
-    justify-content: space-between;
-}
-
-footer {
-    align-items: center;
-    justify-content: space-between;
-}
-
-@media screen and (max-width: 767px) {
-    .navbar-brand {
-        display: none;
+/* La tarjeta del registro conserva el diseño del login;
+   solo se ajusta en pantallas pequeñas con poca altura
+   para evitar que el formulario quede cortado */
+@media (max-width: 991.98px) and (max-height: 720px) {
+    .login-panel {
+        align-items: flex-start;
     }
 
-}
-
-html,
-body {
-    height: 100%;
-    color: #484545;
-}
-body{
-    display: flex;
-    align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #f5f5f5;
-}
-
-.form-signin {
-    max-width: 330px;
-    padding: 15px;
-}
-
-.form-signin .form-floating:focus-within {
-    z-index: 2;
-}
-
-.form-signin input[type="text"]{
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.form-signin input[type="password"]{
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-
-#register {
-    padding: 1.5rem;
+    .login-card--register {
+        margin: 0 auto;
+    }
 }

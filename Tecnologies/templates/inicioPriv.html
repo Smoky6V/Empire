@@ -1,172 +1,725 @@
-
-
-<html lang="es"><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Empire Tecnologies Inc | Inicio</title>
+    <meta name="author" content="Juan Valencia">
+    <meta name="description" content="Área privada de clientes de Empire Tecnologies Inc - accede a tus servicios, proyectos y soporte.">
+    <meta name="keywords" content="área privada, clientes, Empire Tecnologies, servicios, soporte">
+    <!-- Área privada: no debe aparecer en buscadores ni seguirse desde enlaces externos -->
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Mi Cuenta | Empire Tecnologies Inc</title>
 
     {% load static %}
-    <link rel="shortcut icon" href="img/buildings-fill.svg" type="image/x-icon">
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/buildings-fill.svg' %}">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+          crossorigin="anonymous">
+
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- custom css (mismo diseño base que el inicio público) -->
     <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/inicioPriv.css' %}">
 </head>
-
-
 <body>
-    <header>
-        <nav>
-            <a href="#">Inicio</a>
-            <a href="#contact">Contacto</a>
-            <a href="#port">Portafolio</a>
-            <a href="#servic">Servicios</a>
 
-            {% if request.user.is_authenticated %}
-            <a class="sesion" href="{% url 'logout' %}">Cerrar sesion</a>
-            {% else %}
-        <a class="sesion" href="{% url 'login' %}">Iniciar Sesión</a>
-    {% endif %}
-        </nav>
-        <section class="textos-header">
+   
+    {% with empPhone="8296312" empPhoneTel="+578296312" empEmail="contacto@empiretec.com" empWhatsapp="https://wa.me/578296312" empGithub="https://github.com/Smoky6V/Empire" %}
 
-            <h2>Bienvenido! {{request.user.username}}</h2>
-            <h1>Tu lo sueñas nosotros lo realizamos!</h1>
-            <h2>Empire Tecnologies 👨‍💻</h2>
-        </section>
-        <div class="wave" style="height: 150px; overflow: hidden;"><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-            </svg></div>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-expand-lg emp-navbar fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand emp-brand" href="{% url 'index' %}">
+                <img src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="38" height="38">
+                <span class="emp-brand__text">Empire<strong>Tecnologies</strong></span>
+            </a>
+
+            <button class="navbar-toggler emp-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false"
+                    aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav emp-nav__links ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#panel">Mi panel</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#soporte">Soporte</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+
+                <div class="emp-nav__actions">
+                    <span class="emp-user">
+                        <i class="fas fa-user-circle"></i> {{ request.user.username }}
+                    </span>
+                    <a class="btn emp-btn emp-btn--accent" href="{% url 'logout' %}">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+<!-- ================= HERO ================= -->
+    <header class="emp-hero emp-hero--private" id="inicio">
+        <div class="emp-hero__bg" role="img" aria-label="Área privada de clientes de Empire Tecnologies"></div>
+        <div class="emp-hero__overlay"></div>
+
+        <div class="container emp-hero__inner">
+            <span class="emp-badge">
+                <i class="fas fa-circle-check"></i> Sesión activa
+            </span>
+
+            <h1 class="emp-hero__title">
+                Hola, <span>{{ request.user.username }}</span>
+            </h1>
+
+            <p class="emp-hero__text">
+                Este es tu espacio de cliente: revisa los servicios de tu cuenta, el estado de tus
+                proyectos y pide acompañamiento cuando lo necesites.
+            </p>
+
+            <div class="emp-hero__actions">
+                <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="#panel">
+                    <i class="fas fa-gauge-high"></i> Ir a mi panel
+                </a>
+                <a class="btn emp-btn emp-btn--light emp-btn--lg" href="#soporte">
+                    <i class="fas fa-headset"></i> Contactar soporte
+                </a>
+            </div>
+
+            <div class="emp-stats">
+                <div class="emp-stat">
+                    <p class="emp-stat__number">Activa</p>
+                    <p class="emp-stat__label">Estado de tu sesión</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number">{{ request.user.date_joined|date:"M Y" }}</p>
+                    <p class="emp-stat__label">Cliente desde</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number">{{ request.user.last_login|date:"H:i"|default:"--:--" }}</p>
+                    <p class="emp-stat__label">Sesión iniciada hoy</p>
+                </div>
+                <div class="emp-stat">
+                    <p class="emp-stat__number">24/7</p>
+                    <p class="emp-stat__label">Soporte disponible</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="emp-wave" aria-hidden="true">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
+                      style="stroke: none; fill: #ffffff;"></path>
+            </svg>
+        </div>
     </header>
+
     <main>
-        <section class="contenedor sobre-nosotros">
-            <h2 class="titulo">Nuestro Servicio</h2>
-            <div class="contenedor-sobre-nosotros">
-                <img src= "{% static 'img/IA.jpg' %}" alt="" class="imagen-about-us">
-                <div class="contenido-textos">
-                    <h3><span>1</span>Los mejores servicios</h3>
-                    <p>Somos una empresa que fomenta tu creatividad, realizamos los mejores sistemas para
-                        tu negocio.</p>
-                    <h3><span>2</span>Los mejores servicios</h3>
-                    <p>Potenciamos tu negocio con los mejores sistemas</p>
+<!-- ================= MI PANEL ================= -->
+        <section class="emp-section emp-panel" id="panel">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Mi panel</span>
+                    <h2 class="emp-title">Tu cuenta de un vistazo</h2>
+                    <p class="emp-subtitle">
+                        La información de tu cuenta y los accesos directos a lo que más usas.
+                    </p>
+                </div>
+
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-5 emp-reveal">
+                        <div class="emp-profile">
+                            <span class="emp-profile__avatar">{{ request.user.username|first|upper }}</span>
+                            <div class="emp-profile__body">
+                                <p class="emp-profile__name">{{ request.user.username }}</p>
+                                <p class="emp-profile__mail">
+                                    <i class="fas fa-envelope"></i>
+                                    {{ request.user.email|default:"Sin correo registrado" }}
+                                </p>
+                                <span class="emp-chip emp-chip--ok">
+                                    <i class="fas fa-shield-halved"></i> Sesión segura
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 emp-reveal">
+                        <div class="emp-data">
+                            <dl class="emp-data__list">
+                                <div class="emp-data__row">
+                                    <dt>Usuario</dt>
+                                    <dd>{{ request.user.username }}</dd>
+                                </div>
+                                <div class="emp-data__row">
+                                    <dt>Correo</dt>
+                                    <dd>{{ request.user.email|default:"Sin registrar" }}</dd>
+                                </div>
+                                <div class="emp-data__row">
+                                    <dt>Perfil asignado</dt>
+                                    <dd>
+                                        {% for grupo in request.user.groups.all %}
+                                        <span class="emp-chip">{{ grupo.name }}</span>
+                                        {% empty %}
+                                        <span class="emp-chip">Sin grupo</span>
+                                        {% endfor %}
+                                    </dd>
+                                </div>
+                                <div class="emp-data__row">
+                                    <dt>Miembro desde</dt>
+                                    <dd>{{ request.user.date_joined|date:"d \d\e F \d\e Y" }}</dd>
+                                </div>
+                                <div class="emp-data__row">
+                                    <dt>Última conexión</dt>
+                                    <dd>{{ request.user.last_login|date:"d \d\e F, H:i"|default:"Primera sesión" }}</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 emp-quicks">
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <a class="emp-quick" href="#servicios">
+                            <span class="emp-quick__icon"><i class="fas fa-layer-group"></i></span>
+                            <h3 class="emp-quick__title">Servicios</h3>
+                            <p class="emp-quick__text">Lo que podemos construir y mantener para ti.</p>
+                            <span class="emp-quick__arrow">Ver más <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <a class="emp-quick" href="#proyectos">
+                            <span class="emp-quick__icon"><i class="fas fa-images"></i></span>
+                            <h3 class="emp-quick__title">Proyectos</h3>
+                            <p class="emp-quick__text">Ejemplos reales de nuestro portafolio.</p>
+                            <span class="emp-quick__arrow">Ver más <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <a class="emp-quick" href="#soporte">
+                            <span class="emp-quick__icon"><i class="fas fa-headset"></i></span>
+                            <h3 class="emp-quick__title">Soporte</h3>
+                            <p class="emp-quick__text">Cuéntanos una incidencia y te acompañamos.</p>
+                            <span class="emp-quick__arrow">Ver más <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <a class="emp-quick emp-quick--danger" href="{% url 'logout' %}">
+                            <span class="emp-quick__icon"><i class="fas fa-right-from-bracket"></i></span>
+                            <h3 class="emp-quick__title">Cerrar sesión</h3>
+                            <p class="emp-quick__text">Salir de tu cuenta de forma segura.</p>
+                            <span class="emp-quick__arrow">Salir <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
-        <section class="portafolio" id="port">
-            <div class="contenedor">
-                <h2 class="titulo">Portafolio</h2>
-                <div class="galeria-port">
-                    <div class="imagen-port">
-                        <img src= "{% static 'img/img7.jpg' %}">
-                        <div class="hover-galeria">
-                            
-                            <p>Sistema web</p>
-                        </div>
+<!-- ================= SERVICIOS ================= -->
+        <section class="emp-section emp-servicios" id="servicios">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Tus servicios</span>
+                    <h2 class="emp-title">Todo lo que tu cuenta puede aprovechar</h2>
+                    <p class="emp-subtitle">
+                        Como cliente de Empire Tecnologies tienes acceso a nuestro equipo completo:
+                        desarrollo, soporte, analítica y automatización.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-code"></i></span>
+                            <h3 class="emp-card__title">Desarrollo web a medida</h3>
+                            <p class="emp-card__text">
+                                Portales, tiendas y sistemas adaptados a tu operación, siempre rápidos,
+                                seguros y listos para celulares.
+                            </p>
+                        </article>
                     </div>
-                    <div class="imagen-port">
-                        <img src="{% static 'img/img3.jpg' %}" alt="">
-                        <div class="hover-galeria">
-                           
-                            <p>Aplicativo</p>
-                        </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-mobile-alt"></i></span>
+                            <h3 class="emp-card__title">Aplicaciones móviles</h3>
+                            <p class="emp-card__text">
+                                Apps para tu equipo y tus clientes, sincronizadas con tus sistemas y
+                                con modo sin conexión cuando hace falta.
+                            </p>
+                        </article>
                     </div>
-                    <div class="imagen-port">
-                        <img src="{% static 'img/img6.jpg' %}" alt="">
-                        <div class="hover-galeria">
-                           
-                            <p>Asesoria</p>
-                        </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-chart-line"></i></span>
+                            <h3 class="emp-card__title">Sistemas de gestión</h3>
+                            <p class="emp-card__text">
+                                ERP, CRM e inventarios con reportes en tiempo real para que decidas
+                                sobre datos confiables.
+                            </p>
+                        </article>
                     </div>
-                    
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-robot"></i></span>
+                            <h3 class="emp-card__title">Automatización e IA</h3>
+                            <p class="emp-card__text">
+                                Bots y flujos automáticos que reducen tareas repetitivas y liberan
+                                tiempo de tu equipo.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-lightbulb"></i></span>
+                            <h3 class="emp-card__title">Asesoría tecnológica</h3>
+                            <p class="emp-card__text">
+                                Revisamos tus procesos y te proponemos mejoras con costos y
+                                prioridades reales.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 emp-reveal">
+                        <article class="emp-card">
+                            <span class="emp-card__icon"><i class="fas fa-headset"></i></span>
+                            <h3 class="emp-card__title">Soporte y mantenimiento</h3>
+                            <p class="emp-card__text">
+                                Monitoreo, respaldos y actualizaciones con un canal directo al equipo
+                                que construyó tu sistema.
+                            </p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>
-        <section class="clientes contenedor">
-            <h2 class="titulo">Clientes</h2>
-            <div class="cards">
-                <div class="card">
-                    <img src="img/face1.jpg" alt="">
-                    <div class="contenido-texto-card">
-                        <h4>Name</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
-                    </div>
+<!-- ================= PROYECTOS ================= -->
+        <section class="emp-section emp-portafolio" id="proyectos">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Portafolio</span>
+                    <h2 class="emp-title">Proyectos que puedes tomar como referencia</h2>
+                    <p class="emp-subtitle">
+                        Filtra por tipo de solución y revisa cómo resolvimos retos parecidos al tuyo.
+                    </p>
                 </div>
-                <div class="card">
-                    <img src="img/face2.jpg" alt="">
-                    <div class="contenido-texto-card">
-                        <h4>Name</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
+
+                <div class="emp-filters emp-reveal" role="group" aria-label="Filtrar portafolio">
+                    <button type="button" class="emp-filter is-active" data-filter="all">Todos</button>
+                    <button type="button" class="emp-filter" data-filter="web">Web</button>
+                    <button type="button" class="emp-filter" data-filter="movil">Móvil</button>
+                    <button type="button" class="emp-filter" data-filter="ia">IA</button>
+                </div>
+
+                <div class="row g-4" id="empGallery">
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img1.jpg' %}" alt="Portal corporativo desarrollado por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Portal corporativo</h3>
+                                <p>Presencia digital con panel administrativo y contenidos autogestionables.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img2.jpg' %}" alt="Tienda en línea desarrollada por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Tienda en línea</h3>
+                                <p>Catálogo, carrito y pagos integrados con reportes de ventas en vivo.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="movil">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img3.jpg' %}" alt="Aplicación móvil de pedidos desarrollada por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Móvil</span>
+                                <h3>App de pedidos</h3>
+                                <p>Toma de pedidos en calle con sincronización y modo sin conexión.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="ia">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img4.jpg' %}" alt="Panel de analítica con inteligencia artificial de Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">IA</span>
+                                <h3>Analítica con IA</h3>
+                                <p>Tableros que predicen demanda y alertan sobre desviaciones.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="web">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img5.jpg' %}" alt="Sistema de inventario desarrollado por Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Web</span>
+                                <h3>Sistema de inventario</h3>
+                                <p>Control de bodegas, entradas y salidas con trazabilidad total.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 emp-item emp-reveal" data-category="movil">
+                        <figure class="emp-project">
+                            <img src="{% static 'img/img6.jpg' %}" alt="Aplicación móvil de gestión en campo de Empire Tecnologies">
+                            <figcaption class="emp-project__overlay">
+                                <span class="emp-project__tag">Móvil</span>
+                                <h3>Gestión en campo</h3>
+                                <p>Agenda, evidencias fotográficas y reportes desde el celular.</p>
+                            </figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="about-services" id="servic">
-            <div class="contenedor">
-                <h2 class="titulo">Nuestros servicios</h2>
-                <div class="servicio-cont">
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion1.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+<!-- ================= SOPORTE ================= -->
+        <section class="emp-section emp-soporte" id="soporte">
+            <div class="container">
+                <div class="emp-head emp-reveal">
+                    <span class="emp-eyebrow">Soporte</span>
+                    <h2 class="emp-title">¿Necesitas ayuda con tu sistema?</h2>
+                    <p class="emp-subtitle">
+                        Cuéntanos qué está pasando y te respondemos con un plan claro. Tus datos ya
+                        vienen cargados desde tu cuenta.
+                    </p>
+                </div>
+
+                <div class="row g-5 align-items-start">
+                    <div class="col-lg-5 emp-reveal">
+                        <ul class="emp-list">
+                            <li>
+                                <i class="fas fa-bolt"></i>
+                                <div>
+                                    <strong>Respuesta en menos de 24 horas</strong>
+                                    <span>En días hábiles, con un responsable asignado a tu caso.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-shield-halved"></i>
+                                <div>
+                                    <strong>Incidencias críticas primero</strong>
+                                    <span>Priorizamos lo que detiene tu operación.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-database"></i>
+                                <div>
+                                    <strong>Respaldos y monitoreo</strong>
+                                    <span>Revisamos tu sistema antes de que el problema crezca.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-file-lines"></i>
+                                <div>
+                                    <strong>Historial de tus solicitudes</strong>
+                                    <span>Cada requerimiento queda documentado y trazable.</span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <a class="btn emp-btn emp-btn--whatsapp" href="{{ empWhatsapp }}"
+                           target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
+                        </a>
                     </div>
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion4.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+
+                    <div class="col-lg-7 emp-reveal">
+                        <form class="emp-form emp-form--private" id="contactForm" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="emp-form__label" for="cNombre">Nombre</label>
+                                    <input class="form-control emp-form__input" type="text" id="cNombre"
+                                           name="nombre" value="{{ request.user.username }}" required readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="emp-form__label" for="cCorreo">Correo</label>
+                                    <input class="form-control emp-form__input" type="email" id="cCorreo"
+                                           name="correo" value="{{ request.user.email }}" required readonly>
+                                </div>
+                                <div class="col-12">
+                                    <label class="emp-form__label" for="cServicio">Tipo de solicitud</label>
+                                    <select class="form-select emp-form__input" id="cServicio" name="servicio">
+                                        <option value="Incidencia en un sistema">Incidencia en un sistema</option>
+                                        <option value="Nueva funcionalidad">Nueva funcionalidad</option>
+                                        <option value="Consulta general">Consulta general</option>
+                                        <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="emp-form__label" for="cMensaje">Mensaje</label>
+                                    <textarea class="form-control emp-form__input" id="cMensaje" name="mensaje"
+                                              rows="4" placeholder="Describe tu solicitud con el mayor detalle posible"
+                                              required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn emp-btn emp-btn--accent emp-btn--lg w-100">
+                                        <i class="fas fa-paper-plane"></i> Enviar solicitud
+                                    </button>
+                                    <p class="emp-form__note" id="formNote" role="status" aria-live="polite"></p>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="servicio-ind">
-                        <img src="img/ilustracion3.svg" alt="">
-                        <h3>Name</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+                </div>
+            </div>
+        </section>
+<!-- ================= CONTACTO ================= -->
+        <section class="emp-section emp-cta" id="contacto">
+            <div class="container">
+                <div class="emp-cta__box emp-reveal">
+                    <div class="emp-cta__text">
+                        <span class="emp-eyebrow emp-eyebrow--light">Contacto</span>
+                        <h2 class="emp-title emp-title--light emp-title--left">¿Listo para tu próximo proyecto?</h2>
+                        <p class="emp-subtitle emp-subtitle--light emp-subtitle--left">
+                            Escríbenos al <strong>{{ empPhone }}</strong> o a
+                            <strong>{{ empEmail }}</strong> y coordinamos una reunión.
+                        </p>
+                    </div>
+                    <div class="emp-cta__actions">
+                        <a class="btn emp-btn emp-btn--accent emp-btn--lg" href="mailto:{{ empEmail }}">
+                            <i class="fas fa-envelope"></i> Escribir un correo
+                        </a>
+                        <a class="btn emp-btn emp-btn--light emp-btn--lg" href="{{ empWhatsapp }}"
+                           target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-    <footer>
+<!-- ================= FOOTER ================= -->
+    <footer class="emp-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="emp-brand emp-brand--footer" href="#inicio">
+                        <img src="{% static 'img/buildings-fill.svg' %}" alt="Empire Tecnologies" width="38" height="38">
+                        <span class="emp-brand__text">Empire<strong>Tecnologies</strong></span>
+                    </a>
+                    <p class="emp-footer__text">
+                        Tu aliado tecnológico: desarrollo de software a la medida, soporte y
+                        automatización para que tu operación nunca se detenga.
+                    </p>
+                    <div class="emp-social">
+                        <a href="{{ empWhatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:{{ empEmail }}" aria-label="Correo electrónico"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:{{ empPhoneTel }}" aria-label="Teléfono"><i class="fas fa-phone-alt"></i></a>
+                        <a href="{{ empGithub }}" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
 
-        <section id="contact">
+                <div class="col-6 col-lg-2">
+                    <h4 class="emp-footer__title">Mi área</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#panel">Mi panel</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#proyectos">Proyectos</a></li>
+                    </ul>
+                </div>
 
-        <div class="contenedor-footer">
-            <div class="content-foo">
-                <h4>Phone</h4>
-                <p>8296312</p>
+                <div class="col-6 col-lg-3">
+                    <h4 class="emp-footer__title">Ayuda</h4>
+                    <ul class="emp-footer__links">
+                        <li><a href="#soporte">Reportar una incidencia</a></li>
+                        <li><a href="#soporte">Solicitar una funcionalidad</a></li>
+                        <li><a href="#soporte">Mantenimiento preventivo</a></li>
+                        <li><a href="#contacto">Hablar con el equipo</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <h4 class="emp-footer__title">Contacto</h4>
+                    <ul class="emp-footer__links emp-footer__links--contact">
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:{{ empPhoneTel }}">{{ empPhone }}</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:{{ empEmail }}">{{ empEmail }}</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Colombia</li>
+                    </ul>
+                    {# Esta plantilla solo se renderiza con sesión iniciada (accounts/authz.py),
+                       así que aquí no existe el caso anónimo. #}
+                    <a class="btn emp-btn emp-btn--ghost btn-sm w-100" href="{% url 'logout' %}">Cerrar sesión</a>
+                </div>
             </div>
-            <div class="content-foo">
-                <h4>Email</h4>
-                <p>8296312</p>
-            </div>
-            <div class="content-foo">
-                <h4>Location</h4>
-                <p>8296312</p>
+
+            <div class="emp-footer__bottom">
+                <p>&copy; <span id="empYear">2026</span> Empire Tecnologies Inc. Todos los derechos reservados.</p>
+                <p>Sesión de <strong>{{ request.user.username }}</strong> &middot; Área privada de clientes</p>
             </div>
         </div>
-        <h2 class="titulo-final">© Empire Tecnologies | valenciaaa</h2>
     </footer>
 
-<a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
-  <i class="fab fa-whatsapp"></i>
-</a>
+    <!-- Botones flotantes -->
+    <a class="emp-float emp-float--whatsapp" href="{{ empWhatsapp }}" target="_blank" rel="noopener"
+       aria-label="Escribir por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <button type="button" class="emp-float emp-float--top" id="scrollTopBtn" aria-label="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
 
-<a href="#top" class="scroll-top" id="scrollTopBtn" style="display: none;">
-  <i class="fas fa-arrow-up"></i>
-</a>
+    <script>
+        // Interacciones del área privada (JavaScript nativo, sin librerías adicionales)
+        (function () {
+            'use strict';
 
-<script>
-  window.addEventListener('scroll', function () {
-    const btn = document.getElementById('scrollTopBtn');
-    if (window.scrollY > 400) {
-      btn.style.display = 'block';
-    } else {
-      btn.style.display = 'none';
-    }
-  });
-</script>
+            // Año actual en el pie de página
+            var yearEl = document.getElementById('empYear');
+            if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-</body></html>
+            // Navbar con fondo sólido al hacer scroll
+            var nav = document.getElementById('mainNav');
+            function updateNav() {
+                if (nav) { nav.classList.toggle('is-scrolled', window.scrollY > 40); }
+            }
+            updateNav();
+            window.addEventListener('scroll', updateNav, { passive: true });
+
+            // Cerrar el menú móvil al elegir una sección
+            var menu = document.getElementById('navMenu');
+            document.querySelectorAll('.emp-nav__links .nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (menu && menu.classList.contains('show') && window.bootstrap) {
+                        window.bootstrap.Collapse.getOrCreateInstance(menu).hide();
+                    }
+                });
+            });
+
+            // Resaltar el enlace de la sección que se está viendo
+            var sections = Array.prototype.slice.call(document.querySelectorAll('header[id], main section[id]'));
+            var navLinks = Array.prototype.slice.call(document.querySelectorAll('.emp-nav__links .nav-link'));
+            if ('IntersectionObserver' in window && sections.length) {
+                var spyObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) { return; }
+                        navLinks.forEach(function (link) {
+                            link.classList.toggle('is-active', link.getAttribute('href') === '#' + entry.target.id);
+                        });
+                    });
+                }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+                sections.forEach(function (section) { spyObserver.observe(section); });
+            }
+            // Animación de aparición al hacer scroll
+            var revealEls = Array.prototype.slice.call(document.querySelectorAll('.emp-reveal'));
+            if ('IntersectionObserver' in window && revealEls.length) {
+                var revealObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) { return; }
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    });
+                }, { threshold: 0.15 });
+                revealEls.forEach(function (el) { revealObserver.observe(el); });
+            } else {
+                revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+            }
+
+            // Filtros del portafolio
+            var filterButtons = Array.prototype.slice.call(document.querySelectorAll('.emp-filter'));
+            var galleryItems = Array.prototype.slice.call(document.querySelectorAll('#empGallery .emp-item'));
+            filterButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var filter = button.getAttribute('data-filter');
+                    filterButtons.forEach(function (btn) { btn.classList.toggle('is-active', btn === button); });
+                    galleryItems.forEach(function (item) {
+                        var show = filter === 'all' || item.getAttribute('data-category') === filter;
+                        item.classList.toggle('is-hidden', !show);
+                    });
+                });
+            });
+
+            // Botón "volver arriba"
+            var topBtn = document.getElementById('scrollTopBtn');
+            if (topBtn) {
+                function updateTopBtn() {
+                    topBtn.classList.toggle('is-visible', window.scrollY > 400);
+                }
+                updateTopBtn();
+                window.addEventListener('scroll', updateTopBtn, { passive: true });
+                topBtn.addEventListener('click', function () {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            // Formulario de soporte: envío por WhatsApp con los datos de la cuenta
+            var whatsappUrl = '{{ empWhatsapp|escapejs }}';
+            var form = document.getElementById('contactForm');
+            var note = document.getElementById('formNote');
+            if (form) {
+                // Si la cuenta no tiene correo guardado, se permite escribirlo manualmente
+                var emailField = form.correo;
+                if (emailField && !emailField.value.trim()) {
+                    emailField.removeAttribute('readonly');
+                    emailField.placeholder = 'Escribe tu correo de contacto';
+                }
+
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var nombre = form.nombre.value.trim();
+                    var correo = form.correo.value.trim();
+                    var servicio = form.servicio.value;
+                    var mensaje = form.mensaje.value.trim();
+
+                    if (!nombre || !correo || !mensaje) {
+                        if (note) {
+                            note.textContent = 'Completa tu nombre, tu correo y el mensaje para continuar.';
+                            note.classList.add('is-error');
+                        }
+                        return;
+                    }
+
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+                        if (note) {
+                            note.textContent = 'Revisa el correo: parece que falta algo.';
+                            note.classList.add('is-error');
+                        }
+                        return;
+                    }
+
+                    var texto = 'Solicitud de soporte - Empire Tecnologies\n'
+                        + 'Cliente: ' + nombre + ' (' + correo + ')\n'
+                        + 'Tipo: ' + servicio + '\n'
+                        + 'Detalle: ' + mensaje;
+
+                    window.open(whatsappUrl + '?text=' + encodeURIComponent(texto),
+                        '_blank', 'noopener');
+
+                    if (note) {
+                        note.textContent = '¡Listo! Abrimos WhatsApp con tu solicitud preparada para enviar.';
+                        note.classList.remove('is-error');
+                    }
+                    form.mensaje.value = '';
+                });
+            }
+        })();
+    </script>
+
+    {# Cierre del bloque "with" con los datos de contacto definidos arriba. #}
+    {% endwith %}
+</body>
+</html>
