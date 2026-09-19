@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.views.decorators.cache import never_cache
 from django_ratelimit.decorators import ratelimit
 
 from accounts.authz import resolve_template_for_user
@@ -23,8 +24,15 @@ REGISTER_RATE = '5/15m'
 
 
 
+@never_cache
 @ratelimit(key='ip', rate=LOGIN_RATE, method='POST', block=False)
 def login_view(request):
+    # Un usuario con sesion ya iniciada no tiene nada que hacer en /login:
+    # se le devuelve a su pagina principal para que el boton "atras" del
+    # navegador nunca le muestre el formulario de acceso.
+    if request.user.is_authenticated:
+        return redirect('index')
+
     if request.method == 'POST':  # Si el método es POST
         if getattr(request, 'limited', False):
             return render(
@@ -50,7 +58,11 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+@never_cache
 def index(request):
+    # Se marca como no cacheable para que, tras cerrar sesion, el boton
+    # "atras" del navegador no muestre una copia guardada de una vista
+    # privada (el servidor siempre decide que plantilla corresponde).
     return render(request, resolve_template_for_user(request.user))
 
 
@@ -59,8 +71,14 @@ def logout_view(request):
     return redirect('login')
 
 
+@never_cache
 @ratelimit(key='ip', rate=REGISTER_RATE, method='POST', block=False)
 def register(request):
+    # Igual que en /login: con sesion iniciada no tiene sentido crear otra
+    # cuenta, se redirige a la pagina principal correspondiente al rol.
+    if request.user.is_authenticated:
+        return redirect('index')
+
     if request.method == 'POST':
         if getattr(request, 'limited', False):
             messages.error(request, "Demasiados intentos de registro. Intenta de nuevo en unos minutos.")
