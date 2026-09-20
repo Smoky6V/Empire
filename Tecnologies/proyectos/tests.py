@@ -108,3 +108,49 @@ class ProyectoVistasTests(TestCase):
         self.assertEqual(r.status_code, 200)
         nuevo = Proyecto.objects.get(nombre='Web cliente')
         self.assertEqual(nuevo.cliente, self.user)
+
+    def test_resumen_json_solo_admin(self):
+        r = self.client.get('/proyectos/api/resumen/')
+        self.assertIn(r.status_code, (302, 403))
+        self.client.login(username='cli', password='ClaveSegura2024!')
+        r = self.client.get('/proyectos/api/resumen/')
+        self.assertEqual(r.status_code, 403)
+
+    def test_resumen_json_refleja_proyectos_reales(self):
+        self.client.login(username='adm', password='ClaveSegura2024!')
+        ActualizacionProyecto.objects.create(
+            proyecto=self.proyecto, titulo='Fase 1', avance=70)
+        self.proyecto.estado = 'entregado'
+        self.proyecto.save()
+        r = self.client.get('/proyectos/api/resumen/')
+        self.assertEqual(r.status_code, 200)
+        d = r.json()
+        self.assertEqual(d['total'], 1)
+        self.assertEqual(d['entregados'], 1)
+        self.assertEqual(d['activos'], 0)
+        self.assertEqual(d['avance_prom'], 70.0)
+        self.assertEqual(d['total_actividad'], 1)
+        self.assertEqual(len(d['avance_por_proyecto']), 1)
+        self.assertEqual(d['avance_por_proyecto'][0]['codigo'], self.proyecto.codigo)
+        self.assertEqual(len(d['estados_data']), len(d['estados_labels']))
+        self.assertEqual(len(d['meses_labels']), 6)
+        self.assertEqual(sum(d['estados_data']), 1)
+
+    def test_inicio_admin_recibe_metricas(self):
+        self.client.login(username='adm', password='ClaveSegura2024!')
+        r = self.client.get('/')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('panel_metricas', r.context)
+        metricas = r.context['panel_metricas']
+        self.assertEqual(metricas['total'], 1)
+        self.assertIn('meses_labels', metricas)
+
+    def test_metricas_sin_proyectos_no_falla(self):
+        Proyecto.objects.all().delete()
+        self.client.login(username='adm', password='ClaveSegura2024!')
+        r = self.client.get('/proyectos/api/resumen/')
+        self.assertEqual(r.status_code, 200)
+        d = r.json()
+        self.assertEqual(d['total'], 0)
+        self.assertEqual(d['avance_prom'], 0)
+        self.assertEqual(d['por_atender'], [])

@@ -867,109 +867,87 @@
                     </p>
                 </div>
 
+            {% with m=panel_metricas %}
                 <div class="row g-4">
                     <div class="col-sm-6 col-lg-3 emp-reveal">
                         <article class="emp-adm-kpi">
                             <div class="emp-adm-kpi__head">
                                 <span class="emp-adm-kpi__icon"><i class="fas fa-diagram-project"></i></span>
                                 <span class="emp-adm-trend emp-adm-trend--up">
-                                    <i class="fas fa-arrow-trend-up"></i> +2 este mes
+                                    <i class="fas fa-list-check"></i> <span id="kpiTotal">{{ m.total }}</span> en total
                                 </span>
                             </div>
-                            <p class="emp-adm-kpi__value">8</p>
+                            <p class="emp-adm-kpi__value" id="kpiActivos">{{ m.activos }}</p>
                             <p class="emp-adm-kpi__label">Proyectos activos</p>
-                            <p class="emp-adm-note">3 en producción y 2 en desarrollo.</p>
+                            <p class="emp-adm-note" id="kpiActivosNota">{{ m.entregados }} entregados.</p>
                         </article>
                     </div>
 
                     <div class="col-sm-6 col-lg-3 emp-reveal">
                         <article class="emp-adm-kpi">
                             <div class="emp-adm-kpi__head">
-                                <span class="emp-adm-kpi__icon"><i class="fas fa-headset"></i></span>
-                                <span class="emp-adm-trend emp-adm-trend--down">
-                                    <i class="fas fa-arrow-trend-up"></i> +5 esta semana
-                                </span>
-                            </div>
-                            <p class="emp-adm-kpi__value">23</p>
-                            <p class="emp-adm-kpi__label">Tickets abiertos</p>
-                            <p class="emp-adm-note">5 sin asignar y 2 escalados a nivel 2.</p>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-3 emp-reveal">
-                        <article class="emp-adm-kpi">
-                            <div class="emp-adm-kpi__head">
-                                <span class="emp-adm-kpi__icon"><i class="fas fa-file-invoice-dollar"></i></span>
-                                <span class="emp-adm-trend emp-adm-trend--up">
-                                    <i class="fas fa-arrow-trend-up"></i> +8,4%
-                                </span>
-                            </div>
-                            <p class="emp-adm-kpi__value">$24.500.000</p>
-                            <p class="emp-adm-kpi__label">Facturación del mes</p>
-                            <p class="emp-adm-note">Meta del mes: $22.000.000 (superada).</p>
-                        </article>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-3 emp-reveal">
-                        <article class="emp-adm-kpi">
-                            <div class="emp-adm-kpi__head">
-                                <span class="emp-adm-kpi__icon"><i class="fas fa-server"></i></span>
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-gauge-high"></i></span>
                                 <span class="emp-adm-trend emp-adm-trend--flat">
-                                    <i class="fas fa-circle-check"></i> Sin incidencias
+                                    <i class="fas fa-circle-check"></i> Promedio real
                                 </span>
                             </div>
-                            <p class="emp-adm-kpi__value">99,98%</p>
-                            <p class="emp-adm-kpi__label">Disponibilidad (30 días)</p>
-                            <p class="emp-adm-note">Última caída: hace 47 días (12 min).</p>
+                            <p class="emp-adm-kpi__value" id="kpiAvance">{{ m.avance_prom }}%</p>
+                            <p class="emp-adm-kpi__label">Avance promedio</p>
+                            <p class="emp-adm-note">De todos los proyectos vendidos.</p>
+                        </article>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-bolt"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--up">
+                                    <i class="fas fa-calendar-plus"></i> <span id="kpiNuevos">{{ m.nuevos_30 }}</span> nuevos (30 días)
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value" id="kpiHoy">{{ m.actualizados_hoy }}</p>
+                            <p class="emp-adm-kpi__label">Tocados hoy</p>
+                            <p class="emp-adm-note">Proyectos actualizados hoy.</p>
+                        </article>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <article class="emp-adm-kpi">
+                            <div class="emp-adm-kpi__head">
+                                <span class="emp-adm-kpi__icon"><i class="fas fa-clock"></i></span>
+                                <span class="emp-adm-trend emp-adm-trend--up">
+                                    <i class="fas fa-circle text-success"></i> En vivo
+                                </span>
+                            </div>
+                            <p class="emp-adm-kpi__value" id="kpiAvances">{{ m.total_actividad }}</p>
+                            <p class="emp-adm-kpi__label">Avances publicados</p>
+                            <p class="emp-adm-note">Historial de la bitácora.</p>
                         </article>
                     </div>
                 </div>
+                {% endwith %}
                 <div class="row g-4 mt-1">
                     <div class="col-lg-7 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-gauge-high"></i>Avance del mes</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-calendar-day"></i> Septiembre 2026</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-gauge-high"></i>Avance por proyecto</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-circle text-success"></i> En vivo</span>
                             </div>
 
-                            <div class="emp-adm-meter">
-                                <div class="emp-adm-meter__row">
-                                    <span class="emp-adm-meter__label">Entregas a tiempo</span>
-                                    <span class="emp-adm-meter__value">94%</span>
+                            <div class="emp-adm-meter" id="avanceTop">
+                                {% for p in panel_proyectos|slice:":6" %}
+                                <div class="emp-adm-meter" data-codigo="{{ p.codigo }}">
+                                    <div class="emp-adm-meter__row">
+                                        <span class="emp-adm-meter__label">{{ p.codigo }} · {{ p.nombre }}</span>
+                                        <span class="emp-adm-meter__value" data-avance-valor>{{ p.avance }}%</span>
+                                    </div>
+                                    <div class="emp-adm-meter__track">
+                                        <div class="emp-adm-meter__bar" data-avance-barra style="width: {{ p.avance }}%;"></div>
+                                    </div>
                                 </div>
-                                <div class="emp-adm-meter__track">
-                                    <div class="emp-adm-meter__bar" style="width: 94%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="emp-adm-meter">
-                                <div class="emp-adm-meter__row">
-                                    <span class="emp-adm-meter__label">Ocupación del equipo</span>
-                                    <span class="emp-adm-meter__value">82%</span>
-                                </div>
-                                <div class="emp-adm-meter__track">
-                                    <div class="emp-adm-meter__bar" style="width: 82%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="emp-adm-meter">
-                                <div class="emp-adm-meter__row">
-                                    <span class="emp-adm-meter__label">Cobertura de pruebas automatizadas</span>
-                                    <span class="emp-adm-meter__value">87%</span>
-                                </div>
-                                <div class="emp-adm-meter__track">
-                                    <div class="emp-adm-meter__bar" style="width: 87%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="emp-adm-meter">
-                                <div class="emp-adm-meter__row">
-                                    <span class="emp-adm-meter__label">Satisfacción del cliente</span>
-                                    <span class="emp-adm-meter__value">96%</span>
-                                </div>
-                                <div class="emp-adm-meter__track">
-                                    <div class="emp-adm-meter__bar" style="width: 96%;"></div>
-                                </div>
+                                {% empty %}
+                                <p class="emp-adm-note">Sin proyectos todavía. Crea la primera venta abajo.</p>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -1017,6 +995,22 @@
                                 <a class="emp-adm-btn" href="/api/users/me/" target="_blank" rel="noopener">
                                     <i class="fas fa-code"></i> Ver API
                                 </a>
+                            </div>
+                            <div class="emp-adm-panel mt-3">
+                                <div class="emp-adm-panel__head">
+                                    <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Actividad reciente</h3>
+                                    <span class="emp-adm-chip"><i class="fas fa-circle text-success"></i> En vivo</span>
+                                </div>
+                                <ul class="list-unstyled mb-0" id="actividadReciente">
+                                    {% for a in panel_metricas.actividad %}
+                                    <li class="mb-2">
+                                        <b>{{ a.codigo }}</b> · {{ a.titulo }}
+                                        <br><small class="text-muted">{{ a.proyecto }} · {{ a.cuando }}</small>
+                                    </li>
+                                    {% empty %}
+                                    <li class="text-muted">Sin avances publicados todavía.</li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -1150,11 +1144,12 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
         <!-- ================= PANEL: RENDIMIENTO ================= -->
         <section class="emp-section emp-adm-section--alt" id="rendimiento">
             <div class="container">
+            {% with m=panel_metricas %}
                 <div class="emp-head emp-reveal">
                     <span class="emp-eyebrow">Rendimiento</span>
-                    <h2 class="emp-title">Rendimiento del negocio y del equipo</h2>
+                    <h2 class="emp-title">Rendimiento según tus proyectos</h2>
                     <p class="emp-subtitle">
-                        Facturación frente a la meta, distribución de los proyectos, soporte y carga de trabajo.
+                        Todo sale de la base de datos real: proyectos creados, estados, avances y bitácora. En vivo.
                     </p>
                 </div>
 
@@ -1163,17 +1158,21 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     No se pudieron cargar las gráficas (sin acceso al CDN de Chart.js). Los datos siguen
                     disponibles en las tablas del panel.
                 </p>
+                <p class="emp-adm-note">
+                    <i class="fas fa-circle text-success"></i>
+                    Datos iniciales del servidor; se refrescan solos cada 15 s sin recargar.
+                </p>
 
                 <div class="row g-4">
                     <div class="col-lg-8 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-line"></i>Facturación frente a la meta (millones de COP)</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-calendar"></i> Últimos 6 meses</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-line"></i>Proyectos y avances publicados (6 meses)</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-calendar"></i> Datos reales</span>
                             </div>
                             <div class="emp-adm-chart">
-                                <canvas id="empAdmIngresos" role="img"
-                                        aria-label="Gráfica de línea con la facturación mensual frente a la meta"></canvas>
+                                <canvas id="empAdmIngresos" role="img" data-labels="{{ m.meses_labels|join:',' }}" data-creados="{{ m.meses_creados|join:',' }}" data-updates="{{ m.meses_updates|join:',' }}"
+                                        aria-label="Gráfica de línea con proyectos creados y avances publicados por mes"></canvas>
                             </div>
                         </div>
                     </div>
@@ -1184,7 +1183,7 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                                 <h3 class="emp-adm-panel__title"><i class="fas fa-chart-pie"></i>Proyectos por estado</h3>
                             </div>
                             <div class="emp-adm-chart">
-                                <canvas id="empAdmEstados" role="img"
+                                <canvas id="empAdmEstados" role="img" data-labels="{{ m.estados_labels|join:'|' }}" data-valores="{{ m.estados_data|join:',' }}"
                                         aria-label="Gráfica circular con la distribución de proyectos por estado"></canvas>
                             </div>
                         </div>
@@ -1193,12 +1192,12 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     <div class="col-lg-6 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-column"></i>Tickets de soporte por semana</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-headset"></i> Abiertos vs. resueltos</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-chart-column"></i>Avance por proyecto (top 10)</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-percent"></i> % real</span>
                             </div>
                             <div class="emp-adm-chart">
-                                <canvas id="empAdmTickets" role="img"
-                                        aria-label="Gráfica de barras con tickets abiertos y resueltos por semana"></canvas>
+                                <canvas id="empAdmTickets" role="img" data-labels="{{ m.top_labels|join:',' }}" data-valores="{{ m.top_avances|join:',' }}" data-nombres="{{ m.top_nombres|join:'|' }}"
+                                        aria-label="Gráfica de barras con el avance real de cada proyecto"></canvas>
                             </div>
                         </div>
                     </div>
@@ -1206,16 +1205,17 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     <div class="col-lg-6 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-users-gear"></i>Carga por responsable</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-percent"></i> Ocupación actual</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-users-gear"></i>Avance promedio por mes de creación</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-calendar"></i> 6 meses</span>
                             </div>
                             <div class="emp-adm-chart">
-                                <canvas id="empAdmEquipo" role="img"
-                                        aria-label="Gráfica de barras horizontales con la carga de trabajo por responsable"></canvas>
+                                <canvas id="empAdmEquipo" role="img" data-labels="{{ m.meses_labels|join:',' }}" data-valores="{{ m.meses_avance|join:',' }}"
+                                        aria-label="Gráfica de barras con el avance promedio por mes"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
+            {% endwith %}
             </div>
         </section>
         <!-- ================= PANEL: ACTIVIDAD ================= -->
@@ -1223,9 +1223,9 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
             <div class="container">
                 <div class="emp-head emp-reveal">
                     <span class="emp-eyebrow">Actividad</span>
-                    <h2 class="emp-title">Actividad reciente y alertas</h2>
+                    <h2 class="emp-title">Actividad de tus proyectos</h2>
                     <p class="emp-subtitle">
-                        Lo último que ha ocurrido en la plataforma y lo que requiere tu atención hoy.
+                        Bitácora real de avances publicados. En vivo.
                     </p>
                 </div>
 
@@ -1233,90 +1233,50 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     <div class="col-lg-7 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Bitácora</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-circle"></i> Actualizado hace 4 min</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Bitácora en vivo</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-circle text-success"></i> Se actualiza sola</span>
                             </div>
 
-                            <ul class="emp-adm-timeline">
+                            <ul class="emp-adm-timeline" id="bitacoraVivo">
+                                {% for a in panel_metricas.actividad %}
                                 <li>
-                                    <span class="emp-adm-timeline__time">Hoy · 09:12</span>
+                                    <span class="emp-adm-timeline__time">{{ a.cuando }}</span>
                                     <p class="emp-adm-timeline__text">
-                                        Nuevo registro desde la web: <strong>oscar.gomez@empiretec.com</strong>
-                                        añadido al grupo <strong>Usuarios</strong>.
+                                        <strong>{{ a.codigo }}</strong> · {{ a.titulo }} ({{ a.proyecto }})
                                     </p>
                                 </li>
+                                {% empty %}
                                 <li>
-                                    <span class="emp-adm-timeline__time">Hoy · 08:40</span>
-                                    <p class="emp-adm-timeline__text">
-                                        Despliegue <strong>v2.4.1</strong> en producción: Portal de clientes
-                                        (sin errores en la verificación posterior).
-                                    </p>
+                                    <span class="emp-adm-timeline__time">—</span>
+                                    <p class="emp-adm-timeline__text">Sin avances publicados todavía.</p>
                                 </li>
-                                <li>
-                                    <span class="emp-adm-timeline__time">Hoy · 07:55</span>
-                                    <p class="emp-adm-timeline__text">
-                                        Respaldo automático de la base de datos verificado correctamente
-                                        (MySQL, 214 MB).
-                                    </p>
-                                </li>
-                                <li>
-                                    <span class="emp-adm-timeline__time">Ayer · 17:20</span>
-                                    <p class="emp-adm-timeline__text">
-                                        Ticket <strong>#4821</strong> escalado a soporte nivel 2 por
-                                        Distribuidora Pacífico.
-                                    </p>
-                                </li>
-                                <li>
-                                    <span class="emp-adm-timeline__time">Ayer · 15:02</span>
-                                    <p class="emp-adm-timeline__text">
-                                        El proyecto <strong>App móvil de campo</strong> pasó a 68% de avance;
-                                        entrega prevista el 15 de septiembre.
-                                    </p>
-                                </li>
-                                <li>
-                                    <span class="emp-adm-timeline__time">16 sep · 11:30</span>
-                                    <p class="emp-adm-timeline__text">
-                                        Pago confirmado de Distribuidora Pacífico por
-                                        <strong>$4.800.000</strong> (factura FE-2291).
-                                    </p>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-5 emp-reveal">
                         <div class="emp-adm-panel">
                             <div class="emp-adm-panel__head">
-                                <h3 class="emp-adm-panel__title"><i class="fas fa-bell"></i>Alertas</h3>
-                                <span class="emp-adm-chip"><i class="fas fa-list"></i> 3 abiertas</span>
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-bell"></i>Proyectos por atender</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-list"></i> Datos reales</span>
                             </div>
 
-                            <div class="emp-adm-alert emp-adm-alert--crit">
+                            <div id="alertasVivo">
+                            {% for p in panel_proyectos|slice:":5" %}
+                            <div class="emp-adm-alert {% if p.estado == 'pausado' %}emp-adm-alert--crit{% elif p.avance < 30 %}emp-adm-alert--warn{% else %}emp-adm-alert--info{% endif %}">
                                 <i class="fas fa-circle-exclamation"></i>
                                 <div>
-                                    <strong>Proyecto en riesgo:</strong> Integración de pagos vence el
-                                    28 de septiembre y sigue en revisión con un 54% de avance.
+                                    <strong>{{ p.codigo }}</strong> · {{ p.nombre }}: {{ p.get_estado_display }} con {{ p.avance }}%.
                                 </div>
                             </div>
-
-                            <div class="emp-adm-alert emp-adm-alert--warn">
-                                <i class="fas fa-triangle-exclamation"></i>
-                                <div>
-                                    <strong>5 tickets sin asignar</strong> desde hace más de 12 horas.
-                                    Conviene repartirlos entre el equipo de soporte.
-                                </div>
-                            </div>
-
-                            <div class="emp-adm-alert emp-adm-alert--info">
-                                <i class="fas fa-certificate"></i>
-                                <div>
-                                    El certificado TLS del sitio se renueva automáticamente en
-                                    <strong>12 días</strong>. No requiere acción.
-                                </div>
+                            {% empty %}
+                            <p class="emp-adm-note">Sin proyectos todavía.</p>
+                            {% endfor %}
                             </div>
 
                             <div class="emp-adm-actions mt-3">
-                                <a class="emp-adm-btn" href="{% url 'admin:index' %}">
-                                    <i class="fas fa-gauge-high"></i> Ir al panel de Admin
+                                <a class="emp-adm-btn" href="#proyectos">
+                                    <i class="fas fa-diagram-project"></i> Ir a proyectos
                                 </a>
                             </div>
                         </div>
@@ -1356,47 +1316,31 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for u in panel_usuarios %}
                                 <tr>
-                                    <td><span class="emp-adm-table__name">l.gomez</span></td>
-                                    <td>l.gomez@empiretec.com</td>
-                                    <td>Administrador</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
-                                    <td>Hoy · 09:04</td>
+                                    <td><span class="emp-adm-table__name">{{ u.username }}</span></td>
+                                    <td>{{ u.email|default:"—" }}</td>
+                                    <td>
+                                        {% for g in u.groups.all %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if u.is_active %}
+                                        <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span>
+                                        {% else %}
+                                        <span class="emp-adm-status emp-adm-status--plan"><i class="fas fa-pause"></i> Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ u.last_login|date:"d M Y H:i"|default:"Sin acceso" }}</td>
                                 </tr>
-                                <tr>
-                                    <td><span class="emp-adm-table__name">m.ruiz</span></td>
-                                    <td>m.ruiz@empiretec.com</td>
-                                    <td>Vendedor</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
-                                    <td>Hoy · 08:31</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="emp-adm-table__name">a.torres</span></td>
-                                    <td>a.torres@empiretec.com</td>
-                                    <td>Cliente</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Activo</span></td>
-                                    <td>Ayer · 16:47</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="emp-adm-table__name">s.moreno</span></td>
-                                    <td>s.moreno@empiretec.com</td>
-                                    <td>Usuario</td>
-                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-clock"></i> Invitación pendiente</span></td>
-                                    <td>Sin acceso</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="emp-adm-table__name">c.diaz</span></td>
-                                    <td>c.diaz@empiretec.com</td>
-                                    <td>Usuario</td>
-                                    <td><span class="emp-adm-status emp-adm-status--plan"><i class="fas fa-pause"></i> Inactivo</span></td>
-                                    <td>02 ago 2026</td>
-                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5">Sin usuarios registrados todavía.</td></tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
 
                     <p class="emp-adm-note">
-                        Registro de ejemplo: los usuarios reales se consultan en Django admin
+                        Últimas altas reales. La gestión completa está en Django admin
                         (<code>/admin/accounts/usuario/</code>).
                     </p>
                 </div>
@@ -1422,24 +1366,24 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                             </div>
 
                             <div class="emp-adm-service">
-                                <span class="emp-adm-service__name"><i class="fas fa-code"></i>API REST (/api/)</span>
-                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Operativa · 42 ms</span>
+                                <span class="emp-adm-service__name"><i class="fas fa-diagram-project"></i>Proyectos en seguimiento</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> {{ panel_metricas.total }} registrados</span>
                             </div>
                             <div class="emp-adm-service">
-                                <span class="emp-adm-service__name"><i class="fas fa-database"></i>Base de datos MySQL</span>
-                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Operativa · 12 ms</span>
+                                <span class="emp-adm-service__name"><i class="fas fa-gauge-high"></i>Avance promedio global</span>
+                                <span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-chart-simple"></i> {{ panel_metricas.avance_prom }}%</span>
                             </div>
                             <div class="emp-adm-service">
-                                <span class="emp-adm-service__name"><i class="fas fa-cloud-arrow-up"></i>Copias de seguridad</span>
-                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> Verificado · hoy 07:55</span>
+                                <span class="emp-adm-service__name"><i class="fas fa-comments"></i>Avances publicados</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> {{ panel_metricas.total_actividad }} en bitácora</span>
                             </div>
                             <div class="emp-adm-service">
-                                <span class="emp-adm-service__name"><i class="fas fa-rocket"></i>Último despliegue</span>
-                                <span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code-branch"></i> v2.4.1 · hace 3 h</span>
+                                <span class="emp-adm-service__name"><i class="fas fa-clock"></i>Proyectos tocados hoy</span>
+                                <span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> {{ panel_metricas.actualizados_hoy }} actualizados</span>
                             </div>
 
                             <p class="emp-adm-note">
-                                Estado de ejemplo: se conectará a las métricas reales de despliegue y monitoreo.
+                                Cifras calculadas en vivo desde tus proyectos (se refrescan cada 15 s).
                             </p>
                         </div>
                     </div>
@@ -2234,7 +2178,10 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
             }
 
             // -----------------------------------------------------------------
-            // Gráficas de rendimiento
+            // Gráficas REALES + EN VIVO desde tus proyectos.
+            // Los datos iniciales vienen del servidor en data-* y cada 15 s
+            // se piden de nuevo a /proyectos/api/resumen/ para refrescar
+            // KPIs, gráficas, avance por proyecto, bitácora y alertas.
             // -----------------------------------------------------------------
             var nota = document.getElementById('empAdmChartNote');
             if (typeof Chart === 'undefined') {
@@ -2255,34 +2202,42 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
 
             var dibujar = function (id, configuracion) {
                 var canvas = document.getElementById(id);
-                if (!canvas) { return; }
-                new Chart(canvas, configuracion);
+                if (!canvas) { return null; }
+                return new Chart(canvas, configuracion);
             };
-            // Facturación frente a la meta (últimos 6 meses, millones de COP)
-            dibujar('empAdmIngresos', {
+            var leerLista = function (texto, sep) {
+                if (!texto) { return []; }
+                return texto.split(sep).map(function (s) { return s.trim(); });
+            };
+            var leerNumeros = function (texto) {
+                return leerLista(texto, ',').map(function (s) { return parseFloat(s) || 0; });
+            };
+            var canvasIngresos = document.getElementById('empAdmIngresos');
+            var canvasEstados = document.getElementById('empAdmEstados');
+            var canvasTickets = document.getElementById('empAdmTickets');
+            var canvasEquipo = document.getElementById('empAdmEquipo');
+            // Proyectos creados vs avances publicados por mes (6 meses reales)
+            var chartIngresos = dibujar('empAdmIngresos', {
                 type: 'line',
                 data: {
-                    labels: ['Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
+                    labels: canvasIngresos ? leerLista(canvasIngresos.getAttribute('data-labels'), ',') : [],
                     datasets: [
                         {
-                            label: 'Facturación',
-                            data: [16.4, 18.1, 17.2, 21.6, 22.8, 24.5],
+                            label: 'Proyectos creados',
+                            data: canvasIngresos ? leerNumeros(canvasIngresos.getAttribute('data-creados')) : [],
                             borderColor: palette.accent,
-                            backgroundColor: 'rgba(230, 57, 70, 0.12)',
-                            borderWidth: 3,
+                            backgroundColor: palette.accent,
                             tension: 0.35,
-                            fill: true,
-                            pointRadius: 3,
-                            pointBackgroundColor: palette.accent
+                            pointRadius: 4,
+                            fill: false
                         },
                         {
-                            label: 'Meta',
-                            data: [18, 18, 20, 20, 22, 22],
+                            label: 'Avances publicados',
+                            data: canvasIngresos ? leerNumeros(canvasIngresos.getAttribute('data-updates')) : [],
                             borderColor: palette.primaryLight,
-                            borderWidth: 2,
-                            borderDash: [6, 5],
-                            tension: 0.25,
-                            pointRadius: 0,
+                            backgroundColor: palette.primaryLight,
+                            tension: 0.35,
+                            pointRadius: 4,
                             fill: false
                         }
                     ]
@@ -2297,7 +2252,7 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                         tooltip: {
                             callbacks: {
                                 label: function (item) {
-                                    return item.dataset.label + ': ' + item.formattedValue + ' M COP';
+                                    return item.dataset.label + ': ' + item.formattedValue;
                                 }
                             }
                         }
@@ -2306,23 +2261,21 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                         y: {
                             beginAtZero: true,
                             grid: { color: palette.border },
-                            ticks: {
-                                callback: function (valor) { return valor + 'M'; }
-                            }
+                            ticks: { precision: 0 }
                         },
                         x: { grid: { display: false } }
                     }
                 }
             });
 
-            // Distribución de los proyectos por estado
-            dibujar('empAdmEstados', {
+            // Distribución real por estado (dona)
+            var chartEstados = dibujar('empAdmEstados', {
                 type: 'doughnut',
                 data: {
-                    labels: ['En producción', 'En desarrollo', 'En revisión', 'Planificación'],
+                    labels: canvasEstados ? leerLista(canvasEstados.getAttribute('data-labels'), '|') : [],
                     datasets: [{
-                        data: [3, 2, 2, 1],
-                        backgroundColor: [palette.green, palette.primaryLight, palette.amber, palette.grey],
+                        data: canvasEstados ? leerNumeros(canvasEstados.getAttribute('data-valores')) : [],
+                        backgroundColor: [palette.green, palette.primaryLight, palette.accent, palette.amber, palette.primary, palette.grey, palette.muted, palette.primaryDark || palette.primary],
                         borderWidth: 0,
                         hoverOffset: 6
                     }]
@@ -2344,23 +2297,16 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     }
                 }
             });
-            // Tickets de soporte abiertos y resueltos por semana
-            dibujar('empAdmTickets', {
+            // Avance real por proyecto (barras, top 10 con datos del servidor)
+            var chartTickets = dibujar('empAdmTickets', {
                 type: 'bar',
                 data: {
-                    labels: ['Sem 36', 'Sem 37', 'Sem 38', 'Sem 39'],
+                    labels: canvasTickets ? leerLista(canvasTickets.getAttribute('data-labels'), ',') : [],
                     datasets: [
                         {
-                            label: 'Abiertos',
-                            data: [18, 21, 26, 23],
+                            label: 'Avance %',
+                            data: canvasTickets ? leerNumeros(canvasTickets.getAttribute('data-valores')) : [],
                             backgroundColor: palette.accent,
-                            borderRadius: 6,
-                            maxBarThickness: 26
-                        },
-                        {
-                            label: 'Resueltos',
-                            data: [16, 24, 22, 19],
-                            backgroundColor: palette.primaryLight,
                             borderRadius: 6,
                             maxBarThickness: 26
                         }
@@ -2391,15 +2337,15 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                 }
             });
 
-            // Ocupación actual de cada responsable
-            dibujar('empAdmEquipo', {
+            // Avance promedio por mes de creación (barras horizontales reales)
+            var chartEquipo = dibujar('empAdmEquipo', {
                 type: 'bar',
                 data: {
-                    labels: ['Laura Gómez', 'Mateo Ruiz', 'Andrés Torres', 'Sara Moreno', 'Camila Díaz'],
+                    labels: canvasEquipo ? leerLista(canvasEquipo.getAttribute('data-labels'), ',') : [],
                     datasets: [{
-                        label: 'Ocupación',
-                        data: [92, 78, 85, 61, 44],
-                        backgroundColor: [palette.accent, palette.primaryLight, palette.primary, palette.amber, palette.grey],
+                        label: 'Avance promedio %',
+                        data: canvasEquipo ? leerNumeros(canvasEquipo.getAttribute('data-valores')) : [],
+                        backgroundColor: [palette.accent, palette.primaryLight, palette.primary, palette.amber, palette.grey, palette.green],
                         borderRadius: 6,
                         maxBarThickness: 20
                     }]
@@ -2414,7 +2360,7 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                         tooltip: {
                             callbacks: {
                                 label: function (item) {
-                                    return item.formattedValue + '% de ocupación';
+                                    return item.formattedValue + '% de avance promedio';
                                 }
                             }
                         }
@@ -2432,6 +2378,107 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                     }
                 }
             });
+
+            // -----------------------------------------------------------------
+            // Refresco EN VIVO del panel (cada 15 s, sin recargar la pagina):
+            // KPIs, las 4 graficas, barras de avance, bitacora y alertas.
+            // Todo sale de /proyectos/api/resumen/ (agregados reales).
+            // -----------------------------------------------------------------
+            var resumenUrl = "{% url 'proyectos:resumen_json' %}";
+            var esc = function (s) {
+                return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+                });
+            };
+            var texto = function (id, valor) {
+                var el = document.getElementById(id);
+                if (el && valor !== undefined && valor !== null) { el.textContent = valor; }
+            };
+            var actualizarGraficas = function (d) {
+                if (chartIngresos) {
+                    chartIngresos.data.labels = d.meses_labels;
+                    chartIngresos.data.datasets[0].data = d.meses_creados;
+                    chartIngresos.data.datasets[1].data = d.meses_updates;
+                    chartIngresos.update();
+                }
+                if (chartEstados) {
+                    chartEstados.data.labels = d.estados_labels;
+                    chartEstados.data.datasets[0].data = d.estados_data;
+                    chartEstados.update();
+                }
+                if (chartTickets) {
+                    chartTickets.data.labels = d.top_labels;
+                    chartTickets.data.datasets[0].data = d.top_avances;
+                    chartTickets.update();
+                }
+                if (chartEquipo) {
+                    chartEquipo.data.labels = d.meses_labels;
+                    chartEquipo.data.datasets[0].data = d.meses_avance;
+                    chartEquipo.update();
+                }
+            };
+            var actualizarAvanceTop = function (d) {
+                var contenedor = document.getElementById('avanceTop');
+                if (!contenedor || !d.avance_por_proyecto) { return; }
+                d.avance_por_proyecto.forEach(function (p) {
+                    var fila = contenedor.querySelector('[data-codigo="' + p.codigo + '"]');
+                    if (!fila) { return; }
+                    var valor = fila.querySelector('[data-avance-valor]');
+                    var barra = fila.querySelector('[data-avance-barra]');
+                    if (valor) { valor.textContent = p.avance + '%'; }
+                    if (barra) { barra.style.width = p.avance + '%'; }
+                });
+            };
+            var actualizarBitacora = function (d) {
+                var lista = document.getElementById('bitacoraVivo');
+                if (!lista) { return; }
+                if (!d.actividad || !d.actividad.length) {
+                    lista.innerHTML = '<li><span class="emp-adm-timeline__time">-</span>' +
+                        '<p class="emp-adm-timeline__text">Sin avances publicados todavia.</p></li>';
+                    return;
+                }
+                lista.innerHTML = d.actividad.map(function (a) {
+                    return '<li><span class="emp-adm-timeline__time">' + esc(a.cuando) + '</span>' +
+                        '<p class="emp-adm-timeline__text"><strong>' + esc(a.codigo) + '</strong> · ' +
+                        esc(a.titulo) + ' (' + esc(a.proyecto) + ')</p></li>';
+                }).join('');
+            };
+            var actualizarAlertas = function (d) {
+                var contenedor = document.getElementById('alertasVivo');
+                if (!contenedor || !d.por_atender) { return; }
+                if (!d.por_atender.length) {
+                    contenedor.innerHTML = '<p class="emp-adm-note">Sin proyectos todavia.</p>';
+                    return;
+                }
+                contenedor.innerHTML = d.por_atender.map(function (p) {
+                    var clase = p.estado === 'pausado' ? 'emp-adm-alert--crit'
+                        : (p.avance < 30 ? 'emp-adm-alert--warn' : 'emp-adm-alert--info');
+                    return '<div class="emp-adm-alert ' + clase + '">' +
+                        '<i class="fas fa-circle-exclamation"></i><div>' +
+                        '<strong>' + esc(p.codigo) + '</strong> · ' + esc(p.nombre) + ': ' +
+                        esc(p.estado_display) + ' con ' + p.avance + '%.</div></div>';
+                }).join('');
+            };
+            var refrescarPanel = function () {
+                fetch(resumenUrl, { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (d) {
+                        if (!d) { return; }
+                        texto('kpiActivos', d.activos);
+                        texto('kpiTotal', d.total);
+                        texto('kpiAvance', d.avance_prom + '%');
+                        texto('kpiEntregados', d.entregados);
+                        texto('kpiHoy', d.actualizados_hoy);
+                        texto('kpiNuevos', d.nuevos_30);
+                        texto('kpiActivosNota', d.entregados + ' entregados.');
+                        actualizarGraficas(d);
+                        actualizarAvanceTop(d);
+                        actualizarBitacora(d);
+                        actualizarAlertas(d);
+                    })
+                    .catch(function () { });
+            };
+            setInterval(refrescarPanel, 15000);
         })();
     </script>
     {% endif %}

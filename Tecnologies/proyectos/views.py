@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 from accounts.authz import admin_required, user_in_group
 
 from .forms import ActualizacionForm, AvanceRapidoForm, ProyectoAdminForm, VincularCodigoForm
+from .metricas import panel_metricas
 from .models import ActualizacionProyecto, Proyecto
 
 
@@ -130,6 +131,20 @@ def avance_rapido(request):
         )
     messages.success(request, f'{proyecto.codigo} actualizado. El cliente lo ve en tiempo real.')
     return redirect('index')
+
+
+@admin_required
+@require_GET
+@never_cache
+def panel_resumen_json(request):
+    """JSON en vivo para KPIs y graficas del panel inicio.html.
+
+    Solo staff/admin. Se consulta con polling cada 15s desde el JS del
+    panel y devuelve panel_metricas() (todo derivado de la BD real).
+    """
+    resp = JsonResponse(panel_metricas())
+    resp['Cache-Control'] = 'no-store'
+    return resp
 
 
 @admin_required

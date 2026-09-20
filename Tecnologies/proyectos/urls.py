@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/estado/<str:codigo>/', views.proyecto_estado_json, name='estado_json'),
     path('mis-proyectos/', views.mis_proyectos, name='mis'),
     path('mis-proyectos/<str:codigo>/', views.detalle_proyecto, name='detalle'),
+    path('api/resumen/', views.panel_resumen_json, name='resumen_json'),
     path('gestion/', views.admin_lista, name='admin_lista'),
     path('gestion/nuevo/', views.admin_crear, name='admin_crear'),
     path('gestion/avance-rapido/', views.avance_rapido, name='avance_rapido'),

@@ -60,15 +60,11 @@ def login_view(request):
 
 @never_cache
 def index(request):
-    # Se marca como no cacheable para que, tras cerrar sesion, el boton
-    # "atras" del navegador no muestre una copia guardada de una vista
-    # privada (el servidor siempre decide que plantilla corresponde).
-    # Si el usuario es admin, el panel inicio.html necesita ademas la lista
-    # de proyectos + formularios para crear/actualizar sin ir a /admin/.
     contexto = {}
     if request.user.is_authenticated:
         try:
             from proyectos.forms import ProyectoAdminForm
+            from proyectos.metricas import panel_metricas
             from proyectos.models import Proyecto
             from accounts.authz import user_in_group
             es_admin = (
@@ -80,6 +76,13 @@ def index(request):
                     'cliente').prefetch_related('actualizaciones').all()
                 contexto['panel_nuevo_form'] = ProyectoAdminForm()
                 contexto['panel_estados'] = Proyecto.Estado.choices
+                # Metricas reales del panel (KPIs + datos iniciales de graficas).
+                contexto['panel_metricas'] = panel_metricas()
+                # Altas recientes reales (usuarios + grupos + ultimo acceso).
+                from django.contrib.auth import get_user_model
+                contexto['panel_usuarios'] = (
+                    get_user_model().objects.prefetch_related('groups')
+                    .order_by('-date_joined')[:5])
             else:
                 contexto['mis_proyectos_tabla'] = Proyecto.objects.filter(
                     cliente=request.user).prefetch_related('actualizaciones')
