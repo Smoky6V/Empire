@@ -201,6 +201,14 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-lg-3 emp-reveal">
+                        <a class="emp-quick" href="{% url 'proyectos:mis' %}">
+                            <span class="emp-quick__icon"><i class="fas fa-box-open"></i></span>
+                            <h3 class="emp-quick__title">Mi proyecto en vivo</h3>
+                            <p class="emp-quick__text">Vincula tu código EMP-XXXXXX y míralo en tiempo real.</p>
+                            <span class="emp-quick__arrow">Rastrear <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-lg-3 emp-reveal">
                         <a class="emp-quick" href="#proyectos">
                             <span class="emp-quick__icon"><i class="fas fa-images"></i></span>
                             <h3 class="emp-quick__title">Proyectos</h3>
@@ -223,6 +231,36 @@
                             <p class="emp-quick__text">Salir de tu cuenta de forma segura.</p>
                             <span class="emp-quick__arrow">Salir <i class="fas fa-arrow-right"></i></span>
                         </a>
+                    </div>
+                </div>
+<!-- TABLA EN VIVO: proyectos vinculados a esta cuenta (se refresca sola) -->
+                <div class="row g-4 mt-1">
+                    <div class="col-12 emp-reveal">
+                        <div class="emp-data">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                                <h3 class="mb-0"><i class="fas fa-box-open"></i> Mi proyecto en tiempo real</h3>
+                                <a class="btn emp-btn emp-btn--accent btn-sm" href="{% url 'proyectos:mis' %}">Vincular código</a>
+                            </div>
+                            {% if mis_proyectos_tabla %}
+                            <div class="table-responsive"><table class="table table-hover align-middle mb-0" id="empLiveTable">
+                                <thead><tr><th>Código</th><th>Proyecto</th><th>Estado</th><th>Avance</th><th></th></tr></thead>
+                                <tbody>
+                                {% for p in mis_proyectos_tabla %}
+                                <tr data-codigo="{{ p.codigo }}">
+                                    <td><b>{{ p.codigo }}</b></td>
+                                    <td>{{ p.nombre }}</td>
+                                    <td><span class="badge bg-dark" data-estado>{{ p.get_estado_display }}</span></td>
+                                    <td style="min-width:150px"><div class="progress" style="height:12px"><div class="progress-bar bg-danger" data-bar style="width:{{ p.avance }}%"></div></div><small data-pct>{{ p.avance }}%</small></td>
+                                    <td><a class="btn btn-sm btn-outline-danger" href="{% url 'proyectos:detalle' codigo=p.codigo %}">Ver en vivo</a></td>
+                                </tr>
+                                {% endfor %}
+                                </tbody></table></div>
+                            <small class="text-muted"><i class="fas fa-circle text-success"></i> Esta tabla se actualiza sola cada 10 segundos cuando el admin publica avances.</small>
+                            {% else %}
+                            <p class="mb-2">Aún no tienes proyectos vinculados. Pega tu código <b>EMP-XXXXXX</b> para ver tu sistema en vivo.</p>
+                            <a class="btn emp-btn emp-btn--accent" href="{% url 'proyectos:mis' %}"><i class="fas fa-link"></i> Vincular mi código</a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -664,6 +702,31 @@
                 topBtn.addEventListener('click', function () {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
+            }
+            // Tabla en vivo: cada 10s pide el estado de cada proyecto vinculado
+            // y actualiza estado + barra sin recargar (lo que publica el admin).
+            var liveTable = document.getElementById('empLiveTable');
+            if (liveTable) {
+                function refreshRow(row) {
+                    var codigo = row.getAttribute('data-codigo');
+                    fetch('/proyectos/api/estado/' + encodeURIComponent(codigo) + '/',
+                        { headers: { 'Accept': 'application/json' } })
+                        .then(function (r) { return r.ok ? r.json() : null; })
+                        .then(function (d) {
+                            if (!d) return;
+                            var est = row.querySelector('[data-estado]');
+                            var bar = row.querySelector('[data-bar]');
+                            var pct = row.querySelector('[data-pct]');
+                            if (est) est.textContent = d.estado_display;
+                            if (bar) bar.style.width = d.avance + '%';
+                            if (pct) pct.textContent = d.avance + '%';
+                        }).catch(function () {});
+                }
+                function refreshAll() {
+                    Array.prototype.forEach.call(
+                        liveTable.querySelectorAll('tr[data-codigo]'), refreshRow);
+                }
+                setInterval(refreshAll, 10000);
             }
             // Formulario de soporte: envío por WhatsApp con los datos de la cuenta
             var whatsappUrl = '{{ empWhatsapp|escapejs }}';

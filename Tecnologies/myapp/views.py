@@ -63,7 +63,19 @@ def index(request):
     # Se marca como no cacheable para que, tras cerrar sesion, el boton
     # "atras" del navegador no muestre una copia guardada de una vista
     # privada (el servidor siempre decide que plantilla corresponde).
-    return render(request, resolve_template_for_user(request.user))
+    # Se inyectan los proyectos vinculados para que el usuario normal vea
+    # su tabla de seguimiento en tiempo real dentro de su panel.
+    proyectos_usuario = None
+    if request.user.is_authenticated:
+        try:
+            from proyectos.models import Proyecto
+            proyectos_usuario = Proyecto.objects.filter(
+                cliente=request.user).prefetch_related('actualizaciones')
+        except Exception:
+            proyectos_usuario = None
+    return render(request, resolve_template_for_user(request.user), {
+        'mis_proyectos_tabla': proyectos_usuario,
+    })
 
 
 def logout_view(request):

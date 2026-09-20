@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ proyecto.nombre }} en vivo | Empire</title>
+<link rel="icon" type="image/x-icon" href="{% static 'img/buildings-fill.svg' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+<style>.emp-wrap{max-width:900px;margin:7rem auto 3rem;padding:0 1rem}.emp-card{background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(10,25,60,.12);padding:2rem}.emp-bar{height:22px;background:#eef1f6;border-radius:999px;overflow:hidden}.emp-bar>div{height:100%;background:linear-gradient(90deg,#0a1930,#e63946);width:0;transition:width .6s}.emp-timeline{border-left:3px solid #e63946;margin:1.5rem 0 0 .5rem;padding-left:1.2rem}.emp-timeline li{list-style:none;margin-bottom:1rem}.emp-live{font-size:.8rem;color:#198754}</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg emp-navbar fixed-top"><div class="container">
+<a class="navbar-brand emp-brand" href="{% url 'index' %}"><span class="emp-brand__text">Empire<strong>Tecnologies</strong></span></a>
+<div class="ms-auto d-flex gap-2"><a class="btn btn-sm btn-outline-light" href="{% url 'proyectos:mis' %}">Mis proyectos</a></div>
+</div></nav>
+<div class="emp-wrap"><div class="emp-card">
+<h1>{{ proyecto.nombre }}</h1>
+<p class="text-muted">Código {{ proyecto.codigo }} · actualizado <span id="tUpd">{{ proyecto.actualizado|date:"d/m/Y H:i" }}</span></p>
+<p><span class="badge bg-dark" id="tEstado">{{ proyecto.get_estado_display }}</span></p>
+<p>{{ proyecto.descripcion|default:"" }}</p>
+<div class="d-flex justify-content-between"><b>Avance</b><b id="tPct">{{ proyecto.avance }}%</b></div>
+<div class="emp-bar"><div id="tBar" style="width:{{ proyecto.avance }}%"></div></div>
+<p class="emp-live mt-2"><i class="fas fa-circle"></i> En vivo: se actualiza solo cada 10 segundos cuando el admin publica avances.</p>
+<h4 class="mt-3">Historial</h4>
+<ul class="emp-timeline" id="tTimeline">
+{% for a in proyecto.actualizaciones.all %}
+<li><b>{{ a.titulo }}</b> <small class="text-muted">· {{ a.creado|date:"d/m/Y H:i" }}</small><br>{{ a.detalle|linebreaksbr }}</li>
+{% empty %}<li>Sin avances publicados aún.</li>
+{% endfor %}
+</ul>
+</div></div>
+<script>
+(function(){
+  var url = "{% url 'proyectos:estado_json' codigo=proyecto.codigo %}";
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function tick(){
+    fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){return r.json();}).then(function(d){
+      document.getElementById('tEstado').textContent=d.estado_display;
+      document.getElementById('tPct').textContent=d.avance+'%';
+      document.getElementById('tBar').style.width=d.avance+'%';
+      document.getElementById('tUpd').textContent=d.actualizado;
+      var ul=document.getElementById('tTimeline');ul.innerHTML='';
+      if(!d.actualizaciones.length){ul.innerHTML='<li>Sin avances publicados aún.</li>';return;}
+      d.actualizaciones.forEach(function(a){var li=document.createElement('li');li.innerHTML='<b>'+esc(a.titulo)+'</b> <small class="text-muted">· '+esc(a.creado)+'</small><br>'+esc(a.detalle).replace(/\n/g,'<br>');ul.appendChild(li);});
+    }).catch(function(){});
+  }
+  setInterval(tick,10000);
+})();
+</script>
+</body>
+</html>
