@@ -87,3 +87,24 @@ class ProyectoVistasTests(TestCase):
         self.client.login(username='cli', password='ClaveSegura2024!')
         r = self.client.get('/proyectos/gestion/')
         self.assertEqual(r.status_code, 403)
+
+    def test_avance_rapido_desde_inicio(self):
+        self.client.login(username='adm', password='ClaveSegura2024!')
+        r = self.client.post('/proyectos/gestion/avance-rapido/', {
+            'codigo': self.proyecto.codigo,
+            'estado': 'revision', 'avance': 60, 'titulo': 'Avance semanal',
+        }, follow=True)
+        self.assertEqual(r.status_code, 200)
+        self.proyecto.refresh_from_db()
+        self.assertEqual(self.proyecto.estado, 'revision')
+        self.assertEqual(self.proyecto.avance, 60)
+
+    def test_crear_desde_inicio_genera_codigo_y_vuelve(self):
+        self.client.login(username='adm', password='ClaveSegura2024!')
+        r = self.client.post('/proyectos/gestion/nuevo/', {
+            'nombre': 'Web cliente', 'estado': 'planificacion', 'avance': 0,
+            'cliente_ref': 'cli', 'origen': 'inicio',
+        }, follow=True)
+        self.assertEqual(r.status_code, 200)
+        nuevo = Proyecto.objects.get(nombre='Web cliente')
+        self.assertEqual(nuevo.cliente, self.user)

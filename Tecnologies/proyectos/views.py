@@ -1,14 +1,29 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 
-from accounts.authz import group_required, user_in_group
+from accounts.authz import admin_required, user_in_group
 
-from .forms import ActualizacionForm, ProyectoAdminForm, VincularCodigoForm
-from .models import Proyecto
+from .forms import ActualizacionForm, AvanceRapidoForm, ProyectoAdminForm, VincularCodigoForm
+from .models import ActualizacionProyecto, Proyecto
+
+
+def _es_admin(user):
+    return user_in_group(user, 'Administradores') or user.is_staff
+
+
+def _resolver_cliente(ref):
+    """Resuelve username o email al usuario real. None si viene vacio o no existe."""
+    ref = (ref or '').strip()
+    if not ref:
+        return None
+    User = get_user_model()
+    return User.objects.filter(Q(username__iexact=ref) | Q(email__iexact=ref)).first()
 
 
 def _serialize(proyecto):
@@ -78,8 +93,7 @@ def mis_proyectos(request):
 def detalle_proyecto(request, codigo):
     proyecto = get_object_or_404(Proyecto, codigo=codigo.upper())
     es_dueno = proyecto.cliente_id == request.user.id
-    es_admin = user_in_group(request.user, 'Administradores') or request.user.is_staff
-    if not (es_dueno or es_admin):
+    if not (es_dueno or _es_admin(request.user)):
         messages.error(request, 'Ese proyecto no esta vinculado a tu cuenta.')
         return redirect('proyectos:mis')
     return render(request, 'proyectos/detalle.html', {
@@ -87,25 +101,69 @@ def detalle_proyecto(request, codigo):
     })
 
 
-@group_required('Administradores')
+@admin_required
+@require_POST
+@never_cache
+def avance_rapido(request):
+    """Actualiza estado/avance desde la tabla de inicio.html sin salir.
+
+    Si el admin escribe titulo/detalle, tambien se publica en la bitacora
+    que el cliente ve en tiempo real.
+    """
+    form = AvanceRapidoForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, 'No se pudo actualizar: revisa estado y avance (0-100).')
+        return redirect('index')
+    proyecto = get_object_or_404(Proyecto, codigo=form.cleaned_data['codigo'])
+    proyecto.estado = form.cleaned_data['estado']
+    proyecto.avance = form.cleaned_data['avance']
+    proyecto.save(update_fields=['estado', 'avance', 'actualizado'])
+    titulo = form.cleaned_data.get('titulo', '').strip()
+    detalle = form.cleaned_data.get('detalle', '').strip()
+    if titulo or detalle:
+        ActualizacionProyecto.objects.create(
+            proyecto=proyecto,
+            titulo=titulo or f'Avance al {proyecto.avance}%',
+            detalle=detalle,
+            avance=proyecto.avance,
+            creado_por=request.user,
+        )
+    messages.success(request, f'{proyecto.codigo} actualizado. El cliente lo ve en tiempo real.')
+    return redirect('index')
+
+
+@admin_required
 @never_cache
 def admin_lista(request):
     proyectos = Proyecto.objects.select_related('cliente').all()
     return render(request, 'proyectos/admin_lista.html', {'proyectos': proyectos})
 
 
-@group_required('Administradores')
+@admin_required
 @never_cache
 def admin_crear(request):
     form = ProyectoAdminForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        proyecto = form.save()
-        messages.success(request, 'Proyecto creado. Codigo para el cliente: ' + proyecto.codigo)
-        return redirect('proyectos:admin_detalle', codigo=proyecto.codigo)
+        proyecto = form.save(commit=False)
+        cliente = _resolver_cliente(form.cleaned_data.get('cliente_ref'))
+        ref = (form.cleaned_data.get('cliente_ref') or '').strip()
+        if ref and cliente is None:
+            form.add_error('cliente_ref', 'No existe ningun usuario con ese nombre o correo.')
+        else:
+            proyecto.cliente = cliente
+            if cliente is not None and not proyecto.email_cliente:
+                proyecto.email_cliente = cliente.email or ''
+            proyecto.save()
+            form.save_m2m() if hasattr(form, 'save_m2m') else None
+            messages.success(request, 'Proyecto creado. Codigo para el cliente: ' + proyecto.codigo)
+            # Si viene del panel inicio.html, vuelve al panel con el codigo visible.
+            if request.POST.get('origen') == 'inicio':
+                return redirect('index')
+            return redirect('proyectos:admin_detalle', codigo=proyecto.codigo)
     return render(request, 'proyectos/admin_form.html', {'form': form, 'modo': 'crear'})
 
 
-@group_required('Administradores')
+@admin_required
 @never_cache
 def admin_detalle(request, codigo):
     proyecto = get_object_or_404(Proyecto, codigo=codigo.upper())
@@ -123,15 +181,23 @@ def admin_detalle(request, codigo):
     })
 
 
-@group_required('Administradores')
+@admin_required
 @never_cache
 def admin_editar(request, codigo):
     proyecto = get_object_or_404(Proyecto, codigo=codigo.upper())
-    form = ProyectoAdminForm(request.POST or None, instance=proyecto)
+    inicial = {'cliente_ref': proyecto.cliente.username if proyecto.cliente else ''}
+    form = ProyectoAdminForm(request.POST or None, instance=proyecto, initial=inicial)
     if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, 'Proyecto actualizado. El cliente lo ve en tiempo real.')
-        return redirect('proyectos:admin_detalle', codigo=proyecto.codigo)
+        proyecto = form.save(commit=False)
+        cliente = _resolver_cliente(form.cleaned_data.get('cliente_ref'))
+        ref = (form.cleaned_data.get('cliente_ref') or '').strip()
+        if ref and cliente is None:
+            form.add_error('cliente_ref', 'No existe ningun usuario con ese nombre o correo.')
+        else:
+            proyecto.cliente = cliente
+            proyecto.save()
+            messages.success(request, 'Proyecto actualizado. El cliente lo ve en tiempo real.')
+            return redirect('proyectos:admin_detalle', codigo=proyecto.codigo)
     return render(request, 'proyectos/admin_form.html', {
         'form': form, 'modo': 'editar', 'proyecto': proyecto,
     })

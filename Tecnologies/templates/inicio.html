@@ -1028,226 +1028,123 @@
             <div class="container">
                 <div class="emp-head emp-reveal">
                     <span class="emp-eyebrow">Proyectos</span>
-                    <h2 class="emp-title">Proyectos activos</h2>
+                    <h2 class="emp-title">Vende y actualiza sin salir de aquí</h2>
                     <p class="emp-subtitle">
-                        Avance, responsable, fecha de entrega y prioridad de cada trabajo en curso.
+                        Crea el proyecto al vender (se genera el código EMP-XXXXXX) y actualiza
+                        estado y avance desde la misma tabla. El cliente lo ve en tiempo real.
                     </p>
                 </div>
+
+                {% if messages %}
+                <div class="emp-reveal">
+                    {% for m in messages %}
+                    <p class="emp-adm-note">{{ m }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
                 <div class="emp-adm-panel emp-reveal">
                     <div class="emp-adm-panel__head">
-                        <h3 class="emp-adm-panel__title"><i class="fas fa-diagram-project"></i>Tablero de proyectos</h3>
-                        <span class="emp-adm-chip">
-                            <i class="fas fa-list-check"></i>
-                            Mostrando <span id="empAdmCount">8</span> de <span id="empAdmTotal">8</span>
-                        </span>
+                        <h3 class="emp-adm-panel__title"><i class="fas fa-plus-circle"></i>Nueva venta</h3>
+                        <span class="emp-adm-chip"><i class="fas fa-barcode"></i> El código se genera solo</span>
                     </div>
-
-                    <div class="emp-adm-chiprow">
-                        <span class="emp-adm-chip"><i class="fas fa-circle-check"></i> 3 en producción</span>
-                        <span class="emp-adm-chip"><i class="fas fa-code"></i> 2 en desarrollo</span>
-                        <span class="emp-adm-chip"><i class="fas fa-magnifying-glass-chart"></i> 2 en revisión</span>
-                        <span class="emp-adm-chip"><i class="fas fa-compass-drafting"></i> 1 en planificación</span>
-                    </div>
-
-                    <div class="emp-adm-toolbar">
-                        <label class="visually-hidden" for="empAdmSearch">Buscar proyecto</label>
-                        <input type="search" id="empAdmSearch" autocomplete="off"
-                               placeholder="Buscar por proyecto, cliente o responsable…">
-                        <label class="visually-hidden" for="empAdmEstado">Filtrar por estado</label>
-                        <select id="empAdmEstado">
-                            <option value="">Todos los estados</option>
-                            <option value="produccion">En producción</option>
-                            <option value="desarrollo">En desarrollo</option>
-                            <option value="revision">En revisión</option>
-                            <option value="planificacion">En planificación</option>
-                        </select>
-                        <button type="button" class="emp-adm-btn" id="empAdmReset">
-                            <i class="fas fa-rotate-left"></i> Limpiar
-                        </button>
-                    </div>
-
-                    <div class="emp-adm-scroll">
-                        <table class="emp-adm-table" id="empAdmTable">
-                            <caption class="visually-hidden">
-                                Proyectos activos con su estado, avance, responsable y prioridad
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">Proyecto</th>
-                                    <th scope="col">Cliente</th>
-                                    <th scope="col">Responsable</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Avance</th>
-                                    <th scope="col">Entrega</th>
-                                    <th scope="col">Prioridad</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-estado="produccion">
-                                    <td>
-                                        <span class="emp-adm-table__name">Plataforma de gestión logística</span>
-                                        <span class="emp-adm-table__sub">EMP-2401</span>
-                                    </td>
-                                    <td>TransAndina S.A.S.</td>
-                                    <td>Laura Gómez</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 100%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">100%</span>
-                                        </div>
-                                    </td>
-                                    <td>12 ago 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
-                                </tr>
-                                <tr data-estado="produccion">
-                                    <td>
-                                        <span class="emp-adm-table__name">Portal de clientes</span>
-                                        <span class="emp-adm-table__sub">EMP-2412</span>
-                                    </td>
-                                    <td>Grupo Ferretero Norte</td>
-                                    <td>Mateo Ruiz</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 95%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">95%</span>
-                                        </div>
-                                    </td>
-                                    <td>30 ago 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
-                                </tr>
-                                <tr data-estado="produccion">
-                                    <td>
-                                        <span class="emp-adm-table__name">Portal de empleados</span>
-                                        <span class="emp-adm-table__sub">EMP-2388</span>
-                                    </td>
-                                    <td>Colegio Los Andes</td>
-                                    <td>Laura Gómez</td>
-                                    <td><span class="emp-adm-status emp-adm-status--prod"><i class="fas fa-circle-check"></i> En producción</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 100%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">100%</span>
-                                        </div>
-                                    </td>
-                                    <td>28 jul 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
-                                </tr>
-                                <tr data-estado="desarrollo">
-                                    <td>
-                                        <span class="emp-adm-table__name">App móvil de campo</span>
-                                        <span class="emp-adm-table__sub">EMP-2430</span>
-                                    </td>
-                                    <td>AgroSur</td>
-                                    <td>Juan Valencia</td>
-                                    <td><span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code"></i> En desarrollo</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 68%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">68%</span>
-                                        </div>
-                                    </td>
-                                    <td>15 sep 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
-                                </tr>
-                                <tr data-estado="desarrollo">
-                                    <td>
-                                        <span class="emp-adm-table__name">Analítica con inteligencia artificial</span>
-                                        <span class="emp-adm-table__sub">EMP-2441</span>
-                                    </td>
-                                    <td>Clínica San Rafael</td>
-                                    <td>Sara Moreno</td>
-                                    <td><span class="emp-adm-status emp-adm-status--dev"><i class="fas fa-code"></i> En desarrollo</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar is-low" style="width: 45%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">45%</span>
-                                        </div>
-                                    </td>
-                                    <td>10 oct 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--media">Media</span></td>
-                                </tr>
-                                <tr data-estado="revision">
-                                    <td>
-                                        <span class="emp-adm-table__name">Facturación electrónica</span>
-                                        <span class="emp-adm-table__sub">EMP-2425</span>
-                                    </td>
-                                    <td>Distribuidora Pacífico</td>
-                                    <td>Andrés Torres</td>
-                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-magnifying-glass-chart"></i> En revisión</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 82%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">82%</span>
-                                        </div>
-                                    </td>
-                                    <td>22 sep 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
-                                </tr>
-                                <tr data-estado="revision">
-                                    <td>
-                                        <span class="emp-adm-table__name">Integración de pagos</span>
-                                        <span class="emp-adm-table__sub">EMP-2437</span>
-                                    </td>
-                                    <td>EduTech Colombia</td>
-                                    <td>Mateo Ruiz</td>
-                                    <td><span class="emp-adm-status emp-adm-status--review"><i class="fas fa-magnifying-glass-chart"></i> En revisión</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar" style="width: 54%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">54%</span>
-                                        </div>
-                                    </td>
-                                    <td>28 sep 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--alta">Alta</span></td>
-                                </tr>
-                                <tr data-estado="planificacion">
-                                    <td>
-                                        <span class="emp-adm-table__name">Inventarios y bodegas</span>
-                                        <span class="emp-adm-table__sub">EMP-2450</span>
-                                    </td>
-                                    <td>Supermercados La 14</td>
-                                    <td>Camila Díaz</td>
-                                    <td><span class="emp-adm-status emp-adm-status--plan"><i class="fas fa-compass-drafting"></i> Planificación</span></td>
-                                    <td>
-                                        <div class="emp-adm-progress">
-                                            <div class="emp-adm-progress__track">
-                                                <div class="emp-adm-progress__bar is-low" style="width: 12%;"></div>
-                                            </div>
-                                            <span class="emp-adm-progress__value">12%</span>
-                                        </div>
-                                    </td>
-                                    <td>05 nov 2026</td>
-                                    <td><span class="emp-adm-prio emp-adm-prio--baja">Baja</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <p class="emp-adm-empty" id="empAdmEmpty">
-                        <i class="fas fa-circle-info"></i> No hay proyectos que coincidan con la búsqueda.
-                    </p>
-                    <p class="emp-adm-note">
-                        Proyectos de demostración: se reemplazarán por datos reales cuando exista el
-                        modelo de Proyectos y la vista envíe el listado como contexto.
-                    </p>
+                    <form method="post" action="{% url 'proyectos:admin_crear' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="origen" value="inicio">
+                        <div class="emp-adm-toolbar">
+                            <input type="text" name="nombre" required maxlength="200" placeholder="Nombre del sistema *">
+                            <input type="text" name="cliente_ref" placeholder="Cliente: usuario o correo">
+                            <select name="estado">
+                                {% for valor, etiqueta in panel_estados %}
+                                <option value="{{ valor }}">{{ etiqueta }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="number" name="avance" min="0" max="100" value="0" title="Avance %">
+                            <input type="date" name="fecha_entrega_estimada" title="Entrega">
+                            <button type="submit" class="emp-adm-btn emp-adm-btn--accent">
+                                <i class="fas fa-plus"></i> Crear
+                            </button>
+                        </div>
+                        <div class="emp-adm-toolbar">
+                            <input type="text" name="email_cliente" placeholder="Correo comprador (opcional)">
+                            <input type="text" name="descripcion" placeholder="Descripción (opcional)" style="flex:2">
+                        </div>
+                    </form>
                 </div>
+
+                <div class="emp-adm-panel emp-reveal">
+<div class="emp-adm-panel__head">
+<h3 class="emp-adm-panel__title">Tablero real</h3>
+<span class="emp-adm-chip">
+Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id="empAdmTotal">{{ panel_proyectos|length }}</span>
+</span>
+</div>
+<div class="emp-adm-toolbar">
+<input type="search" id="empAdmSearch" autocomplete="off" placeholder="Buscar por proyecto, codigo o cliente...">
+<select id="empAdmEstado">
+<option value="">Todos los estados</option>
+{% for valor, etiqueta in panel_estados %}
+<option value="{{ valor }}">{{ etiqueta }}</option>
+{% endfor %}
+</select>
+<button type="button" class="emp-adm-btn" id="empAdmReset">Limpiar</button>
+</div>
+<div class="emp-adm-scroll">
+<table class="emp-adm-table" id="empAdmTable">
+<thead>
+<tr>
+<th>Proyecto / Codigo</th>
+<th>Cliente</th>
+<th>Estado</th>
+<th>Avance</th>
+<th>Entrega</th>
+<th>Actualizar aqui</th>
+</tr>
+</thead>
+<tbody>
+{% for p in panel_proyectos %}
+<tr data-estado="{{ p.estado }}">
+<td>
+<span class="emp-adm-table__name">{{ p.nombre }}</span>
+<span class="emp-adm-table__sub">{{ p.codigo }}</span>
+</td>
+<td>{{ p.cliente.username|default:p.email_cliente|default:"Sin vincular" }}</td>
+<td>
+<form method="post" action="{% url 'proyectos:avance_rapido' %}">
+{% csrf_token %}
+<input type="hidden" name="codigo" value="{{ p.codigo }}">
+<select name="estado">
+{% for valor, etiqueta in panel_estados %}
+<option value="{{ valor }}" {% if p.estado == valor %}selected{% endif %}>{{ etiqueta }}</option>
+{% endfor %}
+</select>
+</td>
+<td>
+<div class="emp-adm-progress">
+<div class="emp-adm-progress__track">
+<div class="emp-adm-progress__bar" style="width: {{ p.avance }}%;"></div>
+</div>
+<span class="emp-adm-progress__value">{{ p.avance }}%</span>
+</div>
+<input type="number" name="avance" min="0" max="100" value="{{ p.avance }}">
+</td>
+<td>{{ p.fecha_entrega_estimada|date:"d M Y"|default:"--" }}</td>
+<td>
+<input type="text" name="titulo" maxlength="200" placeholder="Titulo avance (opcional)">
+<button type="submit" class="emp-adm-btn emp-adm-btn--accent">Guardar</button>
+<a class="emp-adm-btn" href="{% url 'proyectos:admin_detalle' codigo=p.codigo %}">Detalle</a>
+</form>
+</td>
+</tr>
+{% empty %}
+<tr><td colspan="6">Sin proyectos. Crea la primera venta arriba.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<p class="emp-adm-empty" id="empAdmEmpty">No hay proyectos que coincidan con la busqueda.</p>
+<p class="emp-adm-note">Al guardar, el cliente lo ve en tiempo real (max. 10 s).</p>
+
             </div>
         </section>
         <!-- ================= PANEL: RENDIMIENTO ================= -->

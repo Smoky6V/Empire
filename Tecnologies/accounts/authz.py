@@ -42,6 +42,22 @@ def group_required(*group_names):
     return decorator
 
 
+def admin_required(view_func):
+    """Permite a 'Administradores' O a cuentas staff (is_staff).
+
+    Se usa en el modulo de proyectos para que el admin pueda vender y
+    actualizar tanto desde el panel de inicio.html (staff) como desde
+    las vistas de gestion, sin tener que entrar al /admin/ de Django.
+    """
+    @wraps(view_func)
+    @login_required
+    def _wrapped(request, *args, **kwargs):
+        if not (user_in_group(request.user, 'Administradores') or request.user.is_staff):
+            raise PermissionDenied
+        return view_func(request, *args, **kwargs)
+    return _wrapped
+
+
 # Mapeo explicito y unico de rol -> plantilla. Se recorre en orden, por lo
 # que si un usuario perteneciera a varios grupos, gana el primero de la
 # lista (Administradores > Clientes > Vendedores > Usuarios).

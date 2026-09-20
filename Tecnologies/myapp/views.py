@@ -63,19 +63,29 @@ def index(request):
     # Se marca como no cacheable para que, tras cerrar sesion, el boton
     # "atras" del navegador no muestre una copia guardada de una vista
     # privada (el servidor siempre decide que plantilla corresponde).
-    # Se inyectan los proyectos vinculados para que el usuario normal vea
-    # su tabla de seguimiento en tiempo real dentro de su panel.
-    proyectos_usuario = None
+    # Si el usuario es admin, el panel inicio.html necesita ademas la lista
+    # de proyectos + formularios para crear/actualizar sin ir a /admin/.
+    contexto = {}
     if request.user.is_authenticated:
         try:
+            from proyectos.forms import ProyectoAdminForm
             from proyectos.models import Proyecto
-            proyectos_usuario = Proyecto.objects.filter(
-                cliente=request.user).prefetch_related('actualizaciones')
+            from accounts.authz import user_in_group
+            es_admin = (
+                user_in_group(request.user, 'Administradores')
+                or request.user.is_staff
+            )
+            if es_admin:
+                contexto['panel_proyectos'] = Proyecto.objects.select_related(
+                    'cliente').prefetch_related('actualizaciones').all()
+                contexto['panel_nuevo_form'] = ProyectoAdminForm()
+                contexto['panel_estados'] = Proyecto.Estado.choices
+            else:
+                contexto['mis_proyectos_tabla'] = Proyecto.objects.filter(
+                    cliente=request.user).prefetch_related('actualizaciones')
         except Exception:
-            proyectos_usuario = None
-    return render(request, resolve_template_for_user(request.user), {
-        'mis_proyectos_tabla': proyectos_usuario,
-    })
+            pass
+    return render(request, resolve_template_for_user(request.user), contexto)
 
 
 def logout_view(request):

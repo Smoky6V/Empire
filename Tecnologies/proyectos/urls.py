@@ -11,6 +11,7 @@ urlpatterns = [
     path('mis-proyectos/<str:codigo>/', views.detalle_proyecto, name='detalle'),
     path('gestion/', views.admin_lista, name='admin_lista'),
     path('gestion/nuevo/', views.admin_crear, name='admin_crear'),
+    path('gestion/avance-rapido/', views.avance_rapido, name='avance_rapido'),
     path('gestion/<str:codigo>/', views.admin_detalle, name='admin_detalle'),
     path('gestion/<str:codigo>/editar/', views.admin_editar, name='admin_editar'),
 ]
