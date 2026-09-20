@@ -109,6 +109,25 @@ class AutorizacionPorRolTests(TestCase):
         response = self.client.get(reverse('index'))
         self.assertTemplateUsed(response, 'admindash.html')
 
+    def test_staff_sin_grupo_ve_inicio_en_modo_admin(self):
+        staff = User.objects.create_user(username='staff1', email='s@s.com', password='ClaveSegura2024!')
+        staff.is_staff = True
+        staff.save()
+        self.client.login(username='staff1', password='ClaveSegura2024!')
+        response = self.client.get(reverse('index'))
+        self.assertTemplateUsed(response, 'inicio.html')
+        # El panel de gestion recibe el contexto de proyectos.
+        self.assertIn('panel_proyectos', response.context)
+        self.assertIn('panel_estados', response.context)
+
+    def test_staff_sin_grupo_gestiona_proyectos(self):
+        staff = User.objects.create_user(username='staff2', email='s2@s.com', password='ClaveSegura2024!')
+        staff.is_staff = True
+        staff.save()
+        self.client.login(username='staff2', password='ClaveSegura2024!')
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+
     def test_usuario_de_otro_grupo_no_ve_panel_admin(self):
         """Un usuario sin el grupo Administradores nunca debe ver admindash.html."""
         user = User.objects.create_user(username='u2', email='u2@u.com', password='ClaveSegura2024!')

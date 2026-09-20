@@ -75,4 +75,9 @@ def resolve_template_for_user(user):
         for group_name, template in ROLE_TEMPLATES:
             if user_in_group(user, group_name):
                 return template
+        # Cuentas staff (is_staff) sin grupo: ven el panel claro de inicio.html
+        # en modo admin (bloque {% if request.user.is_staff %}). Sin esto,
+        # un staff sin grupo caeria al inicio publico pero sin contexto admin.
+        if getattr(user, 'is_staff', False):
+            return "inicio.html"
     return "inicio.html"
