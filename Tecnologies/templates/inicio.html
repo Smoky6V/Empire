@@ -202,6 +202,12 @@
             box-shadow: 0 12px 34px rgba(15, 27, 61, 0.06);
         }
 
+        /* Variante para paneles apilados en una misma columna: sin height
+           100% (si no, el primero se estira a toda la columna y desborda). */
+        .emp-adm-panel--auto {
+            height: auto;
+        }
+
         .emp-adm-panel__head {
             display: flex;
             flex-wrap: wrap;
@@ -952,7 +958,7 @@
                         </div>
                     </div>
                     <div class="col-lg-5 emp-reveal">
-                        <div class="emp-adm-panel">
+                        <div class="emp-adm-panel emp-adm-panel--auto">
                             <div class="emp-adm-panel__head">
                                 <h3 class="emp-adm-panel__title"><i class="fas fa-id-badge"></i>Mi cuenta</h3>
                                 {% if request.user.is_superuser %}
@@ -996,22 +1002,23 @@
                                     <i class="fas fa-code"></i> Ver API
                                 </a>
                             </div>
-                            <div class="emp-adm-panel mt-3">
-                                <div class="emp-adm-panel__head">
-                                    <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Actividad reciente</h3>
-                                    <span class="emp-adm-chip"><i class="fas fa-circle text-success"></i> En vivo</span>
-                                </div>
-                                <ul class="list-unstyled mb-0" id="actividadReciente">
-                                    {% for a in panel_metricas.actividad %}
-                                    <li class="mb-2">
-                                        <b>{{ a.codigo }}</b> · {{ a.titulo }}
-                                        <br><small class="text-muted">{{ a.proyecto }} · {{ a.cuando }}</small>
-                                    </li>
-                                    {% empty %}
-                                    <li class="text-muted">Sin avances publicados todavía.</li>
-                                    {% endfor %}
-                                </ul>
+                        </div>
+
+                        <div class="emp-adm-panel emp-adm-panel--auto mt-3">
+                            <div class="emp-adm-panel__head">
+                                <h3 class="emp-adm-panel__title"><i class="fas fa-clock-rotate-left"></i>Actividad reciente</h3>
+                                <span class="emp-adm-chip"><i class="fas fa-circle text-success"></i> En vivo</span>
                             </div>
+                            <ul class="list-unstyled mb-0" id="actividadReciente">
+                                {% for a in panel_metricas.actividad %}
+                                <li class="mb-2">
+                                    <b>{{ a.codigo }}</b> · {{ a.titulo }}
+                                    <br><small class="text-muted">{{ a.proyecto }} · {{ a.cuando }}</small>
+                                </li>
+                                {% empty %}
+                                <li class="text-muted">Sin avances publicados todavía.</li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -2459,6 +2466,19 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                         esc(p.estado_display) + ' con ' + p.avance + '%.</div></div>';
                 }).join('');
             };
+            var actualizarActividadResumen = function (d) {
+                var lista = document.getElementById('actividadReciente');
+                if (!lista) { return; }
+                if (!d.actividad || !d.actividad.length) {
+                    lista.innerHTML = '<li class="text-muted">Sin avances publicados todavia.</li>';
+                    return;
+                }
+                lista.innerHTML = d.actividad.map(function (a) {
+                    return '<li class="mb-2"><b>' + esc(a.codigo) + '</b> · ' + esc(a.titulo) +
+                        '<br><small class="text-muted">' + esc(a.proyecto) + ' · ' +
+                        esc(a.cuando) + '</small></li>';
+                }).join('');
+            };
             var refrescarPanel = function () {
                 fetch(resumenUrl, { headers: { 'Accept': 'application/json' } })
                     .then(function (r) { return r.ok ? r.json() : null; })
@@ -2474,6 +2494,7 @@ Mostrando <span id="empAdmCount">{{ panel_proyectos|length }}</span> de <span id
                         actualizarGraficas(d);
                         actualizarAvanceTop(d);
                         actualizarBitacora(d);
+                        actualizarActividadResumen(d);
                         actualizarAlertas(d);
                     })
                     .catch(function () { });
