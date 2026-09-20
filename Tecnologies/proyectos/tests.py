@@ -154,3 +154,38 @@ class ProyectoVistasTests(TestCase):
         self.assertEqual(d['total'], 0)
         self.assertEqual(d['avance_prom'], 0)
         self.assertEqual(d['por_atender'], [])
+
+
+class MetricasPanelTests(TestCase):
+    """El JSON que alimenta las graficas del panel no debe exponer datos del
+    cliente (correo, usuario) ni romperse cuando aun no hay proyectos."""
+
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            username='adm3', email='adm3@x.com', password='ClaveSegura2024!')
+        self.admin.is_staff = True
+        self.admin.save()
+
+    def _payload(self):
+        self.client.login(username='adm3', password='ClaveSegura2024!')
+        r = self.client.get('/proyectos/api/resumen/')
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('no-store', r['Cache-Control'])
+        return r.json()
+
+    def test_payload_no_expone_datos_del_cliente(self):
+        p = Proyecto.objects.create(nombre='Privado', email_cliente='cliente@correo.com')
+        d = self._payload()
+        crudo = str(d).lower()
+        for prohibido in ('cliente@correo.com', 'email', 'password'):
+            self.assertNotIn(prohibido, crudo)
+        self.assertEqual(d['avance_por_proyecto'][0]['codigo'], p.codigo)
+
+    def test_payload_vacio_es_coherente(self):
+        d = self._payload()
+        self.assertEqual(d['total'], 0)
+        self.assertEqual(sum(d['estados_data']), 0)
+        self.assertEqual(len(d['meses_labels']), 6)
+        self.assertEqual(len(d['meses_creados']), 6)
+        self.assertEqual(len(d['meses_updates']), 6)
+        self.assertEqual(d['actividad'], [])
