@@ -57,9 +57,18 @@ class ProteccionRutasMiddleware:
         self.get_response = get_response
         # Prefijo configurable (DJANGO_ADMIN_URL_PREFIX en el entorno): en
         # produccion se puede mover el admin a una ruta no adivinable.
-        prefijo = str(getattr(settings, 'ADMIN_URL_PREFIX', 'admin') or '').strip('/')
-        # Normalizado a '/prefijo/' para poder comparar con request.path.
-        self.prefijo = f'/{prefijo}/' if prefijo else ''
+        admin_prefijo = str(
+            getattr(settings, 'ADMIN_URL_PREFIX', 'admin') or ''
+        ).strip('/')
+        self.admin_prefix = f'/{admin_prefijo}/' if admin_prefijo else ''
+        # Prefijo de la API: /api/ (usado para controlar /api/auth/login/).
+        api_prefijo = str(
+            getattr(settings, 'API_URL_PREFIX', 'api') or ''
+        ).strip('/')
+        self.api_prefix = f'/{api_prefijo}/' if api_prefijo else ''
+        self.api_auth_login_pattern = (
+            self.api_prefix + 'auth/login/'
+        )  # '/api/auth/login/'
 
     # --- helpers -----------------------------------------------------------
 
@@ -94,14 +103,26 @@ class ProteccionRutasMiddleware:
     # --- ciclo de la peticion ---------------------------------------------
 
     def __call__(self, request):
-        # 1) Puerta del admin: ni siquiera mostrar su formulario de login.
-        if self.prefijo and request.path.startswith(self.prefijo):
+        path = request.path
+        is_admin = path.startswith(self.admin_prefix)
+        is_api = path.startswith(self.api_prefix)
+
+        # 1) Eliminado login API seguro: cualquier metodo da 404 cerradamente.
+        if path == self.api_auth_login_pattern or path == self.api_auth_login_pattern.rstrip('/'):
+            pagina = self._pagina_error(request, TEMPLATE_404, 404)
+            if pagina is not None:
+                logger.warning(
+                    'Login API solicitado y bloqueado por seguridad (ruta: %s)',
+                    path,
+                )
+                return pagina
+
+        # 2) Admin de Django: ni siquiera mostrar su formulario de login.
+        if is_admin:
             if not self._es_staff(getattr(request, 'user', None)):
-                # Se registra el intento sin exponer datos sensibles: es util
-                # para detectar escaneos de /admin/ en los logs del servidor.
                 logger.warning(
                     'Acceso al admin bloqueado para usuario no staff (ruta: %s)',
-                    request.path,
+                    path,
                 )
                 pagina = self._pagina_error(request, TEMPLATE_404, 404)
                 if pagina is not None:
@@ -109,7 +130,7 @@ class ProteccionRutasMiddleware:
 
         response = self.get_response(request)
 
-        # 2) Paginas tecnicas de DEBUG: solo para staff.
+        # 3) Paginas tecnicas de DEBUG: solo para staff.
         if settings.DEBUG and self._es_html(response):
             user = getattr(request, 'user', None)
             if not self._es_staff(user):
@@ -121,7 +142,7 @@ class ProteccionRutasMiddleware:
                     logger.exception(
                         'Error interno (ruta: %s). El detalle tecnico solo se '
                         'muestra a cuentas staff.',
-                        request.path,
+                        path,
                     )
                     pagina = self._pagina_error(request, TEMPLATE_500, 500)
                     if pagina is not None:
