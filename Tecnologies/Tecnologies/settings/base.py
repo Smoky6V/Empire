@@ -57,9 +57,33 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Oculta /admin/ (404) a quien no sea staff autenticado. Va despues de
+    # AuthenticationMiddleware porque necesita request.user.
+    'accounts.middleware.AdminGateMiddleware',
 ]
 
 ROOT_URLCONF = 'Tecnologies.urls'
+
+
+# ---------------------------------------------------------------------------
+# Autenticacion en las vistas web.
+#
+# LOGIN_URL apunta al nombre de la vista propia de login (myapp.views.login_view).
+# Sin esto, Django usa su default '/accounts/login/', que NO existe en este
+# proyecto: cualquier @login_required sacaba al usuario anonimo a un 404 en
+# vez de invitarlo a iniciar sesion.
+# ---------------------------------------------------------------------------
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+
+
+# ---------------------------------------------------------------------------
+# Ruta del admin de Django. Configurable por entorno para poder moverlo a una
+# ruta no adivinable en produccion (DJANGO_ADMIN_URL_PREFIX=mi-panel-secreto).
+# La usa tanto Tecnologies/urls.py como accounts.middleware.AdminGateMiddleware,
+# que toman el valor de aqui para no duplicar el prefijo en dos sitios.
+# ---------------------------------------------------------------------------
+ADMIN_URL_PREFIX = env.str('DJANGO_ADMIN_URL_PREFIX', default='admin')
 
 TEMPLATES = [
     {

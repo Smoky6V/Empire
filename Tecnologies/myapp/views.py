@@ -5,6 +5,8 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django_ratelimit.decorators import ratelimit
 
@@ -20,6 +22,25 @@ User = get_user_model()
 # responde con el mismo mensaje de error generico que ya usaba.
 LOGIN_RATE = '10/5m'
 REGISTER_RATE = '5/15m'
+
+
+def _destino_seguro(request):
+    """Destino tras el login, validado contra open redirect.
+
+    @login_required añade ?next=<ruta protegida>. Solo se acepta si es una
+    URL relativa al propio sitio (url_has_allowed_host_and_scheme): un
+    ?next=https://sitio-falso.com se ignora y se va al index. Asi el usuario
+    vuelve a donde iba sin abrir un redirect abierto.
+    """
+    destino = request.POST.get('next') or request.GET.get('next')
+    if destino and url_has_allowed_host_and_scheme(
+        url=destino,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return destino
+    return reverse('index')
+
 
 
 
@@ -48,14 +69,16 @@ def login_view(request):
 
         if user is not None:
                 login(request, user)  # Si el usuario es autenticado, hacemos login
-                return redirect('index')  # Redirige a la página principal (asegúrate de que 'index' esté bien configurado)
+                # Vuelve a la ruta protegida de la que venia (si existe y es
+                # del propio sitio); si no, a su panel segun su rol.
+                return redirect(_destino_seguro(request))
         else:
                 # Si el usuario no es autenticado, agregar un error
                  return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos'})
     
     
 
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'next': request.GET.get('next', '')})
 
 
 @never_cache
