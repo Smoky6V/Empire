@@ -61,11 +61,22 @@ def buscar_por_codigo(request):
 
 @require_GET
 def proyecto_estado_json(request, codigo):
-    proyecto = get_object_or_404(Proyecto, codigo=codigo.upper())
+    """Estado de un proyecto en JSON, para el refresco en vivo.
+
+    Si el codigo no existe se responde 404 en JSON (y no el HTML de la
+    pagina de error): asi un cliente externo (app, integracion) puede
+    interpretar el resultado sin adivinar el contenido.
+    """
+    try:
+        proyecto = Proyecto.objects.get(codigo=codigo.upper())
+    except Proyecto.DoesNotExist:
+        resp = JsonResponse(
+            {'detail': 'No encontramos ningun proyecto con ese codigo.'}, status=404)
+        resp['Cache-Control'] = 'no-store'
+        return resp
     resp = JsonResponse(_serialize(proyecto))
     resp['Cache-Control'] = 'no-store'
     return resp
-
 
 @login_required
 @never_cache

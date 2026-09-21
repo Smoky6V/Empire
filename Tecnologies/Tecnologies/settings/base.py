@@ -57,9 +57,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Oculta /admin/ (404) a quien no sea staff autenticado. Va despues de
-    # AuthenticationMiddleware porque necesita request.user.
-    'accounts.middleware.AdminGateMiddleware',
+    # Oculta /admin/ (404) a quien no sea staff autenticado y ademas sustituye
+    # las paginas tecnicas de DEBUG (que listan todas las rutas) por las de
+    # marca. Va despues de AuthenticationMiddleware porque necesita request.user.
+    'accounts.middleware.ProteccionRutasMiddleware',
 ]
 
 ROOT_URLCONF = 'Tecnologies.urls'

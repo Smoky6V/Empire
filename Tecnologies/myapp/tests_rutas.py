@@ -111,3 +111,62 @@ class ProteccionDeRutasTests(TestCase):
         r = self.client.get('/admin/')
         self.assertEqual(r.status_code, 404)
         self.assertTemplateUsed(r, '404.html')
+
+    # --- La pagina tecnica de DEBUG no filtra las rutas del proyecto ------
+
+    # Marcas de la pagina tecnica de Django (la que lista las rutas). En la
+    # pagina de marca del sitio no puede aparecer ninguna.
+    MARCAS_TECNICAS = (
+        'URLconf',
+        'Page not found',
+        'tried these URL patterns',
+        'DEBUG = True',
+        "name='login'",
+        '/admin/',
+        '/api/',
+    )
+
+    def test_404_no_muestra_rutas_del_proyecto_a_anonimo(self):
+        """Con DEBUG=True Django listaba admin/, api/, proyectos/, login...
+        Ahora un anonimo recibe la pagina de marca sin esa informacion."""
+        r = self.client.get('/ashjkfhas')
+        self.assertEqual(r.status_code, 404)
+        self.assertTemplateUsed(r, '404.html')
+        contenido = r.content.decode('utf-8')
+        for prohibido in self.MARCAS_TECNICAS:
+            self.assertNotIn(prohibido, contenido)
+
+    def test_404_no_muestra_rutas_del_proyecto_a_usuario_normal(self):
+        self.client.login(username='normal', password='ClaveSegura2024!')
+        r = self.client.get('/ashjkfhas')
+        self.assertEqual(r.status_code, 404)
+        self.assertTemplateUsed(r, '404.html')
+        contenido = r.content.decode('utf-8')
+        for prohibido in self.MARCAS_TECNICAS:
+            self.assertNotIn(prohibido, contenido)
+
+    def test_404_de_otra_ruta_tampoco_filtrara_rutas(self):
+        """No solo /admin/: cualquier ruta inexistente queda sin el listado."""
+        for ruta in ('/ashjkfhas', '/admin/zzz', '/api/ashjkfhas/', '/proyectos/zzz'):
+            r = self.client.get(ruta)
+            self.assertEqual(r.status_code, 404)
+            contenido = r.content.decode('utf-8')
+            for prohibido in self.MARCAS_TECNICAS:
+                self.assertNotIn(prohibido, contenido)
+
+    def test_staff_si_ve_el_detalle_tecnico_del_404(self):
+        """El desarrollador (staff) no pierde la informacion de depuracion."""
+        self.client.login(username='jefe', password='ClaveSegura2024!')
+        r = self.client.get('/ashjkfhas')
+        self.assertEqual(r.status_code, 404)
+        self.assertTemplateUsed(r, '404.html')
+
+    def test_json_de_estado_no_devuelve_html(self):
+        """Si el codigo de proyecto no existe, /api/estado/ responde JSON (y no
+        el HTML de la pagina de error), para que un cliente externo pueda
+        interpretar la respuesta."""
+        r = self.client.get('/proyectos/api/estado/EMP-ZZ9999/')
+        self.assertEqual(r.status_code, 404)
+        self.assertIn('application/json', r.get('Content-Type', ''))
+        self.assertIn('detail', r.json())
+
